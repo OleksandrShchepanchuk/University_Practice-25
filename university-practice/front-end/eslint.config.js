@@ -17,12 +17,21 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
+    // rules: {
+    //   ...reactHooks.configs.recommended.rules,
+    //   'react-refresh/only-export-components': [
+    //     'warn',
+    //     { allowConstantExport: true },
+    //   ],
+    // },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-    },
-  },
+                'react/jsx-uses-react': 'error',
+                'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+                '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+                '@typescript-eslint/ban-ts-comment': 'off',
+                'react/display-name': 'off',
+                '@typescript-eslint/no-explicit-any': 'warn',
+                'react/prop-types': 'off',
+            },
+        },
 )
