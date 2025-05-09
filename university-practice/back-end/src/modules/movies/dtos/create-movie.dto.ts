@@ -35,4 +35,8 @@ export class CreateMovieDto {
   @ArrayNotEmpty()
   @IsString({ each: true })
   photos: string[]
+
+  @IsNumber()
+  @Min(0)
+  duration: number
 }
