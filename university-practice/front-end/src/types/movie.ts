@@ -7,4 +7,6 @@ export interface Movie {
     year: number;
     trailer: string;
     cast: string[];
+    photos: string[];
+    duration: number;
 }

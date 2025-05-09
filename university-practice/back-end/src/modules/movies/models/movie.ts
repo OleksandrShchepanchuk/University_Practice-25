@@ -11,4 +11,6 @@ export class Movie extends BaseModel {
   year: number
   trailer: string
   cast: string[]
+  photos: string[]
+  duration: number
 }
