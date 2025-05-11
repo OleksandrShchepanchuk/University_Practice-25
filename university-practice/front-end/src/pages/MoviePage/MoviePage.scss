@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Maitree:wght@200;300;400&display=swap&subset=latin,cyrillic');
+
+// Variables
+$bg-image: './images/batman.jpg';
+$min-height: 100vh;
+$text-white: #ffffff;
+$font-maitree: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-bakbak: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
+$overlay-color: rgba(0, 0, 0, 0.7); // Add this variable for overlay
+$font-weight-maitree: 200;
+$color-red: #C81313;
+$color-white: white;
+$color-red-hover: #af1313;
+
+
+$screen-md: 1024px;
+$screen-lg: 1440px;
+$screen-xl: 1920px;
+$screen-sm: 768px;
+
+
+// Base font sizes
+$base-font-size: 1rem;
+$title-font-size: 2.1rem;
+$genre-font-size: 0.865rem;
+
+// Reset
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-maitree;
+}
+
+// Movie Page Layout
+.movie-page {
+    position: relative;
+    min-height: $min-height;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url($bg-image);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      opacity: 1;
+      z-index: -2;
+    }
+  
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: $overlay-color;
+      z-index: -1;
+    }
+  }
+
+.movie-content {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+  // Uncomment for responsive layout
+  // @media (min-width: 1024px) {
+  //   flex-direction: row;
+  // }
+}
+
+// Movie Main Info Section
+.movie-maininfo {
+//   min-height: $min-height;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
+  padding-left: 2%;
+  @media (min-width: $screen-md) {
+    width: 32%;
+  }
+
+  @media (min-width: $screen-lg) {
+    width: 35%;
+  }
+
+  @media (min-width: $screen-xl) {
+    width: 38%;
+  }
+    
+
+  
+}
+
+// Movie Extra Info Section
+.movie-extra {
+    margin-top: 4%;
+  min-height: $min-height;
+  width: 70vw;
+  margin-left: 50px;
+  display: flex; // Add this
+  flex-direction: column; // Add this
+
+  
+
+}
+
+// Movie Details
+.movie {
+    &-description {
+      margin-top: 6%;
+      color: $text-white;
+      font-family: $font-maitree;
+      font-weight: $font-weight-maitree;
+      font-size: $base-font-size;
+      line-height: 1.6;
+      margin-right:1%;
+  
+      @media (min-width: $screen-md) {
+        font-size: 0.9rem;
+      }
+  
+      @media (min-width: $screen-lg) {
+        font-size: 1.0rem;
+      }
+  
+      @media (min-width: $screen-xl) {
+        font-size: 1.1rem;
+      }
+    }
+  
+    &-cast {
+      margin-top: 0;
+      margin-right:1%;
+      color: $text-white;
+      font-family: $font-maitree;
+      font-weight: $font-weight-maitree;
+      font-size: $base-font-size;
+  
+      @media (min-width: $screen-md) {
+        font-size: 0.9rem;
+      }
+  
+      @media (min-width: $screen-lg) {
+        font-size: 1.0rem;
+    }
+
+    @media (min-width: $screen-xl) {
+      font-size: 1.1rem;
+      margin-top: 4%;
+    }
+  }
+}
+
+.buy-button {
+    font-family: $font-maitree;
+    width: 46%;
+    background-color: $color-red;
+    color: $color-white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: $font-maitree ;
+    font-size: 0.865rem;
+     margin-left: 25px;
+     margin-top: 10px;
+     position: relative;
+     
+  
+      @media (min-width: $screen-xl) {
+        width: 62%;
+        font-size: 1.4rem;
+        padding: 14px 28px;
+        margin-left: 40px;
+        border-radius: 24px;
+      }
+
+    &:hover {
+      background-color: $color-red-hover;
+    }
+  }
+
+
+.movie-content {
+    position: relative;
+    display: flex;
+    flex-direction: column; // Stack elements vertically on mobile
+    padding: 0;
+    
+    @media (min-width: $screen-md) {
+        flex-direction: row; // Return to row layout on desktop
+        padding: 0 2vw;
+    }
+}
+
+.movie-maininfo {
+    width: 100%; // Full width on mobile
+    padding: 0;
+    margin: 0;
+    min-height: auto;
+    
+    
+    .poster {
+        width: 100%;
+        height: 65vh; // About 40% of viewport height
+        object-fit: cover;
+        border-radius: 0; // Remove border radius on mobile
+        margin: 0;
+    }
+
+    @media (min-width: $screen-md) {
+        width: 30%;
+        padding-left: 2%;
+        
+        .poster {
+            width: 80%;
+            height: auto;
+            border-radius: 15px;
+            margin-top: 2%;
+        }
+    }
+}
+
+.movie-extra {
+    width: 100%; // Full width on mobile
+    margin: 0;
+    padding: 16px;
+    min-height: auto;
+    
+    @media (min-width: $screen-md) {
+        width: 70vw;
+        // margin-left: 50px;
+        margin-top: 4%;
+        min-height: $min-height;
+    }
+}
+
+.movie {
+    &-description {
+        margin: 20px 16px;
+        font-size: 0.9rem;
+        
+        @media (min-width: $screen-md) {
+            margin-top: 6%;
+            margin-right: 1%;
+            font-size: $base-font-size;
+        }
+    }
+    
+    &-cast {
+        margin: 16px;
+        font-size: 0.9rem;
+        
+        @media (min-width: $screen-md) {
+            margin-top: 0;
+            margin-right: 1%;
+            font-size: $base-font-size;
+        }
+    }
+}
