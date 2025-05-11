@@ -34,7 +34,8 @@ export class BaseService<T extends BaseModel> implements IBaseService<T> {
       const snapshot = await query.get()
 
       if (snapshot.empty) {
-        throw new Error('No documents found')
+        //throw new Error('No documents found')
+        return []
       }
 
       return snapshot.docs.map((doc) => ({
