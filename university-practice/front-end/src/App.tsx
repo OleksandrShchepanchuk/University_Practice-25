@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadMovies } from './store/slices/movieSlice';
 import { loginUser, logoutUser } from './store/slices/usersSlice';
+import { fetchSessions } from './store/slices/sessionsSlice';
 import { Movie } from './types/movie';
 import type { AppDispatch, RootState } from './store';
 
@@ -16,7 +17,7 @@ function App() {
   // Redux state
   const { list, loading: moviesLoading, error: movieError } = useSelector((state: RootState) => state.movies);
   const { user, loading: userLoading, error: userError } = useSelector((state: RootState) => state.users);
-
+  const { sessions } = useSelector((state: RootState) => state.sessions);
   const handleLogin = async () => {
     try {
       await dispatch(loginUser({ email, password })).unwrap();
@@ -33,8 +34,14 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(loadMovies());
+      dispatch(fetchSessions());
     }
   }, [user, dispatch]);
+
+  // Debug (опційно)
+  useEffect(() => {
+    console.log('Sessions from store:', sessions);
+  }, [sessions]);
 
   return (
     <div style={{ padding: 20 }}>

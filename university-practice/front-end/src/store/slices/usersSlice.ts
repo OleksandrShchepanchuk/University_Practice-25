@@ -4,7 +4,6 @@ import {
   signOut,
 } from 'firebase/auth';
 import { auth } from '../../firebaseConfig'; // Your initialized Firebase
-import { setAuthToken } from '../../api/axiosInstance';
 import { User } from '../../types/user'; // Updated import for the new User interface
 
 type UserState = {
@@ -28,7 +27,7 @@ export const loginUser = createAsyncThunk<
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const idToken = await userCredential.user.getIdToken();
-    setAuthToken(idToken);
+    console.log(idToken);
     const user: User = {
       uid: userCredential.user.uid,
       email: userCredential.user.email,
@@ -47,7 +46,6 @@ export const loginUser = createAsyncThunk<
 // Async thunk for logout
 export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
   await signOut(auth);
-  setAuthToken(null);
 });
 
 const userSlice = createSlice({
