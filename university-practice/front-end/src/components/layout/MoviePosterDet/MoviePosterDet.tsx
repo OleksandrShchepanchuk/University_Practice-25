@@ -2,7 +2,7 @@ import React from 'react';
 import { Movie } from '../../../types/movie';
 import './MoviePosterDet.scss';
 
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
 interface Props {
     movie: Movie;
@@ -20,7 +20,7 @@ const MoviePosterDet: React.FC<Props> = ({ movie }) => (
             <FaPlay />
           </button>
           <button className="icon-button">
-            <FaStar />
+            <FaRegStar />
           </button>
         </div>
       </div>

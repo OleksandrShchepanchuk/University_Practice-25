@@ -122,6 +122,22 @@ $screen-xl: 1920px;
     
   
       .icon-button {
+        // --- MOVED DECS HERE ---
+        background: #676767;
+        opacity: 0.8;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out; 
+        // --- END MOVED DECS ---
+
         svg {
           width: 18px;
           height: 16px;
@@ -142,19 +158,9 @@ $screen-xl: 1920px;
           }
         
         }
-        background: #676767;
-        opacity: 0.8;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out; 
+        // background: #676767; // <-- Original position line 145
+        // opacity: 0.8;      // <-- Original position line 146
+        // ... rest of the icon-button base styles ...
   
         @media (min-width: $screen-md) {
           width: 40px;
