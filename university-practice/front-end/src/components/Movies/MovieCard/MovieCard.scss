@@ -1,0 +1,88 @@
+.movie-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+    }
+
+    &__image {
+        position: relative;
+        width: 100%;
+        padding-top: 150%; // 2:3 aspect ratio
+        background-color: var(--image-bg, #f0f0f0);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+
+        img {
+            border-radius: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+        position: relative;
+        gap: 8px;
+
+        .movie-card__title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color, #333);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-card__fav-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--fav-btn-bg, rgba(255, 255, 255, 0.9));
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 0;
+            height: 36px;
+            width: 36px;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+
+            svg {
+                font-size: 1.25rem;
+                color: var(--text-color, #333);
+                transition: color 0.2s ease;
+            }
+
+            &:hover {
+                background: var(--fav-btn-hover, #ffe58f);
+            }
+        }
+
+        .movie-card__times {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            width: 100%;
+
+            span {
+                font-size: 0.85rem;
+                color: var(--badge-color, #1890ff);
+                padding: 4px 8px;
+                border-radius: 4px;
+            }
+        }
+    }
+}
