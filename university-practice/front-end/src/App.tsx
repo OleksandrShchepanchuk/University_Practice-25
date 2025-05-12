@@ -1,20 +1,24 @@
 // src/App.tsx
 import { Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./testPages/LoginPage";
+import MoviePage from "./pages/MoviePage/MoviePage";
 
 const App = () => {
     return (
         <div>
-            <nav style={{ padding: 10, borderBottom: "1px solid #ccc" }}>
-                <Link to="/" style={{ marginRight: 10 }}>
-                    Login
-                </Link>
-            </nav>
+        {/* //     <nav style={{ padding: 10, borderBottom: "1px solid #ccc" }}>
+        //         <Link to="/" style={{ marginRight: 10 }}>
+        //             Login
+        //         </Link>
+        //     </nav> */}
 
-            <Routes>
-                <Route path="/" element={<LoginPage />} />
-            </Routes>
+             <Routes>
+                 <Route path="/" element={<LoginPage />} />
+                 <Route path="/movies/:id" element={<MoviePage />} />
+             </Routes>
         </div>
+        
+        
     );
 };
 

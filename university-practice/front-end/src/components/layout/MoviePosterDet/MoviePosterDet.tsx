@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Movie } from '../../../types/movie';
 import './MoviePosterDet.scss';
 
@@ -8,7 +8,15 @@ interface Props {
     movie: Movie;
 }
 
-const MoviePosterDet: React.FC<Props> = ({ movie }) => (
+const MoviePosterDet: React.FC<Props> = ({ movie }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
+  
+  return(
+  
    <div className="movie-card">
     <img src={movie.poster} alt={movie.title} className="poster" />
     <div className="movie-info">
@@ -19,9 +27,12 @@ const MoviePosterDet: React.FC<Props> = ({ movie }) => (
           <button className="icon-button">
             <FaPlay />
           </button>
-          <button className="icon-button">
-            <FaRegStar />
-          </button>
+          <button 
+              className={`icon-button ${isFavorite ? 'active' : ''}`}
+              onClick={toggleFavorite}
+            >
+              {isFavorite ? <FaStar /> : <FaRegStar />}
+            </button>
         </div>
       </div>
       <p className="details">
@@ -32,5 +43,6 @@ const MoviePosterDet: React.FC<Props> = ({ movie }) => (
     </div>
   </div>
 );
+}
 
 export default MoviePosterDet;
