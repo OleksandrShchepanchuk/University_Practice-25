@@ -1,57 +1,57 @@
 // src/store/slices/sessionsSlice.ts
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { MoviesSession } from "../../types/movies-session";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { MoviesSession } from '../../types/movies-session';
 import {
     getSessions,
     //createSession,
     //updateSession,
     //deleteSession,
-} from "../../api/sessions";
+} from '../../api/sessions';
 
 interface SessionsState {
-    sessions: MoviesSession[];
+    list: MoviesSession[];
     loading: boolean;
     error: string | null;
+    hasLoaded: boolean;
 }
 
 const initialState: SessionsState = {
-    sessions: [],
+    list: [],
     loading: false,
     error: null,
+    hasLoaded: false,
 };
 
-export const fetchSessions = createAsyncThunk<
-    MoviesSession[],
-    void,
-    { rejectValue: string }
->("sessions/fetchAll", async (_, thunkAPI) => {
-    try {
-        return await getSessions();
-    } catch (err) {
-        return thunkAPI.rejectWithValue(
-            (err as Error).message || "Failed to load sessions"
-        );
-    }
-});
+export const loadSessions = createAsyncThunk<MoviesSession[], void, { rejectValue: string }>(
+    'sessions/fetchAll',
+    async (_, thunkAPI) => {
+        try {
+            return await getSessions();
+        } catch (err) {
+            return thunkAPI.rejectWithValue((err as Error).message || 'Failed to load sessions');
+        }
+    },
+);
 
 const sessionsSlice = createSlice({
-    name: "sessions",
+    name: 'sessions',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchSessions.pending, (state) => {
+            .addCase(loadSessions.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchSessions.fulfilled, (state, action) => {
-                state.sessions = action.payload;
+            .addCase(loadSessions.fulfilled, (state, action) => {
+                state.list = action.payload;
                 state.loading = false;
+                state.hasLoaded = true;
             })
-            .addCase(fetchSessions.rejected, (state, action) => {
+            .addCase(loadSessions.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ?? "Unknown error";
+                state.error = action.payload ?? 'Unknown error';
             });
     },
 });

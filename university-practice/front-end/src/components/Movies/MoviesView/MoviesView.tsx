@@ -1,38 +1,79 @@
-import FilmCard from '../MovieCard/MovieCard';
-import type { Movie } from '../../../types/movie.ts';
-import FilmCard from '../MovieCard/MovieCard';
-import type { Movie } from '../../../types/movie';
+import React, { useState } from 'react';
+import MovieCard from '../MovieCard/MovieCard';
+import { MovieWithSession } from '../../../types/movie';
+import './MoviesView.scss';
 
-const films: Movie[] = [
-    {
-        title: 'Inception',
-        poster: '/images/inception.jpg',
-        description: 'A thief who steals corporate secrets through dream-sharing.',
-        genre: 'Sci-Fi',
-        rating: 8.8,
-        year: 2010,
-        trailer: 'https://youtube.com/trailer/inception',
-        cast: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt'],
-    },
-    {
-        title: 'Interstellar',
-        poster: '/images/interstellar.jpg',
-        description: 'A team of explorers travel through a wormhole in space.',
-        genre: 'Sci-Fi',
-        rating: 8.6,
-        year: 2014,
-        trailer: 'https://youtube.com/trailer/interstellar',
-        cast: ['Matthew McConaughey', 'Anne Hathaway'],
-    },
-];
+type MoviesViewProps = {
+    title?: string;
+    movies: MovieWithSession[];
+    loading?: boolean;
+    error?: string | null;
+    variant?: 'default' | 'session';
+};
 
-const FilmsView = () => {
+const MOVIES_PER_PAGE = 10;
+
+const MoviesView: React.FC<MoviesViewProps> = ({
+    title = 'All Movies',
+    movies,
+    loading,
+    error,
+    variant = 'default',
+}) => {
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(movies.length / MOVIES_PER_PAGE);
+    const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
+    const currentMovies = movies.slice(startIdx, startIdx + MOVIES_PER_PAGE);
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     return (
-        <div className="films-view">
-            {films.map((film) => (
-                <FilmCard key={film.title} film={film} />
-            ))}
-        </div>
+        <section className="movies-view">
+            <h1 className="movies-view__title">{title}</h1>
+
+            {loading && <p className="movies-view__status">Loading movies...</p>}
+            {error && <p className="movies-view__status movies-view__status--error">Error: {error}</p>}
+            {!loading && !error && currentMovies.length === 0 && (
+                <p className="movies-view__status">No movies available.</p>
+            )}
+
+            <div className="movies-view__grid">
+                {currentMovies.map((movie) => (
+                    <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        variant={variant}
+                        showTimes={variant === 'session' ? movie.schedule?.[0]?.times : undefined}
+                    />
+                ))}
+            </div>
+
+            {!loading && totalPages > 1 && (
+                <div className="movies-view__pagination">
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                        ← Prev
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => handlePageChange(page)}
+                            className={page === currentPage ? 'active' : ''}
+                        >
+                            {page}
+                        </button>
+                    ))}
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                        Next →
+                    </button>
+                </div>
+            )}
+        </section>
     );
 };
-export default FilmsView;
+
+export default MoviesView;
