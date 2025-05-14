@@ -1,13 +1,15 @@
+// src/App.tsx
+import LoginPage from './pages/LoginPage/LoginPage';
+import MoviePage from './pages/MoviePage/MoviePage';
 import Header from './components/layout/Header/Header.js';
 import { Routes, Route, Link } from 'react-router-dom';
-import LoginPage from './testPages/LoginPage';
 import AuthProvider from './components/common/AuthProvider';
-import SessionsPage from './testPages/SessionPage';
+import SessionPage from './testPages/SessionPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
-import { loadFavourites } from './store/slices/favouriteSlice'; 
+import { loadFavourites } from './store/slices/favouriteSlice';
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +35,9 @@ const App = () => {
 
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
-                    <Route path="/s" element={<SessionsPage />} />
+                    <Route path="/s" element={<SessionPage />} />
+                    <Route path="/movies/:id" element={<MoviePage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     {/* <Route path='/header' element={<Header />} />  */}
                 </Routes>
             </div>

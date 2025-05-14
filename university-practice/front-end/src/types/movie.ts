@@ -1,5 +1,3 @@
-import { Schedule } from './schedule';
-
 export interface Movie {
     id: string;
     title: string;
@@ -15,6 +13,9 @@ export interface Movie {
 }
 
 export interface MovieWithSession extends Movie {
-    price?: number;
-    schedule?: Schedule[];
+    price: number;
+    schedule: Array<{
+        date: string;
+        times: string[];
+    }>;
 }

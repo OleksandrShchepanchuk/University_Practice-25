@@ -7,5 +7,5 @@ export class MoviesSession extends BaseModel {
 
   movie: Movie
   price: number
-  schedule: Schedule[]
+  schedule: Schedule
 }
