@@ -46,7 +46,7 @@ function App() {
 			<button onClick={handleLogin}>Login</button>
 
 			{idToken && (
-				<div>
+		<div>
 					<h2>ID Token:</h2>
 					<textarea
 						value={idToken}
