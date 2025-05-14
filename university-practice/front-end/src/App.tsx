@@ -1,12 +1,26 @@
 // src/App.tsx
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MoviePage from "./pages/MoviePage/MoviePage";
-
 import { Routes, Route, Link } from 'react-router-dom';
 import AuthProvider from './components/common/AuthProvider';
 import SessionsPage from './testPages/SessionPage';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from './store';
+import { useEffect } from 'react';
+import { useAuth } from './hooks/useAuth';
+import { loadFavourites } from './store/slices/favouriteSlice'; // ✅ adjust path
 
 const App = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { isAuthenticated } = useAuth();
+    const { hasLoaded, loading, error } = useSelector((state: RootState) => state.favourites);
+
+    useEffect(() => {
+        if (isAuthenticated && !hasLoaded && !loading && !error) {
+            dispatch(loadFavourites());
+        }
+    }, [dispatch, isAuthenticated, hasLoaded, loading, error]);
+
     return (
         <AuthProvider>
             <div>
