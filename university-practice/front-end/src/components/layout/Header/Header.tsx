@@ -7,13 +7,13 @@ const Header: React.FC = () => {
     <header className="header">
       <div className="nav-group">
         <nav className="nav">
-          <a href="#">Головна</a>
-          <a href="#">Розклад сеансів</a>
+          <a href="/">Головна</a>
+          <a href="/sessions">Розклад сеансів</a>
           <a href="#">Обрані</a>
           <a href="#">Панель адміністратора</a>
         </nav>
         <div className="user-icon">
-          <UserIcon size={24} color="white" />
+          <a href=""><UserIcon size={24} color="white" /></a>
         </div>
       </div>
     </header>
