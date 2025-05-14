@@ -8,7 +8,7 @@ const SessionsPage = () => {
     const { list: sessions, loading } = useSelector((state: RootState) => state.sessions);
 
     useEffect(() => {
-        dispatch(loadSessions());
+        // dispatch(loadSessions());
     }, [dispatch]);
 
     return (

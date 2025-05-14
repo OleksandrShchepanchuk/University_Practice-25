@@ -12,7 +12,7 @@ const SessionsPage = () => {
     const { list: sessions, loading, error, hasLoaded } = useSelector((state: RootState) => state.sessions);
 
     useEffect(() => {
-        if (!hasLoaded) dispatch(loadSessions());
+        // if (!hasLoaded) dispatch(loadSessions());
     }, [dispatch, hasLoaded]);
 
     // Group sessions by date
