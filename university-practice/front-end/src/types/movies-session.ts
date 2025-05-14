@@ -2,10 +2,10 @@ import { Schedule } from './schedule';
 import { Movie } from './movie';
 
 export interface MoviesSession {
-    id?: string; // optional for new sessions
-    movie: Movie; // full object in UI
+    id?: string;
+    movie: Movie;
     price: number;
-    schedule: Schedule[];
+    schedule: Schedule;
 }
 
 export const toCreateMoviesSessionDto = (session: MoviesSession) => ({

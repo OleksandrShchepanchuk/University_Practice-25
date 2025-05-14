@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import LoginPage from './testPages/LoginPage';
 import AuthProvider from './components/common/AuthProvider';
-import SessionsPage from './testPages/SessionPage';
+import SessionPage from './testPages/SessionPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
@@ -31,7 +31,7 @@ const App = () => {
 
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
-                    <Route path="/s" element={<SessionsPage />} />
+                    <Route path="/s" element={<SessionPage />} />
                 </Routes>
             </div>
         </AuthProvider>

@@ -30,7 +30,7 @@ export class MoviesSessionService extends BaseService<MoviesSession> {
       const movieSessionData = {
         movie: { id: data.movieId, ...movie },
         price: data.price,
-        schedule: serializeSchedule as Schedule[],
+        schedule: serializeSchedule as Schedule,
       }
 
       const docRef = await this.collection.add(movieSessionData)

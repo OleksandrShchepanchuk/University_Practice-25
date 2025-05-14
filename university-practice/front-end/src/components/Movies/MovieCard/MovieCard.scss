@@ -70,7 +70,8 @@
                     background: var(--fav-btn-hover, #ffe58f);
                 }
             }
-
+        }
+        .movie-card__showtimes {
             .movie-card__times {
                 display: flex;
                 flex-wrap: wrap;
@@ -80,9 +81,15 @@
 
                 span {
                     font-size: 0.85rem;
-                    color: var(--badge-color, #1890ff);
+                    color: var(--text-color, #fff);
                     padding: 4px 8px;
                     border-radius: 4px;
+                    text-decoration: none;
+                    font-weight: 600;
+
+                    &:visited {
+                        color: var(--text-color, #fff);
+                    }
                 }
             }
         }

@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MovieCard from '../MovieCard/MovieCard';
 import { MovieWithSession } from '../../../types/movie';
+import { Movie } from '../../../types/movie';
 import './MoviesView.scss';
 import { useAuth } from '../../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+
 type MoviesViewProps = {
     title?: string;
-    movies: MovieWithSession[];
+    movies: (Movie | MovieWithSession)[];
     loading?: boolean;
     error?: string | null;
     variant?: 'default' | 'session';
 };
 
 const MOVIES_PER_PAGE = 10;
+
+const isMovieWithSession = (movie: Movie | MovieWithSession): movie is MovieWithSession => {
+    return (
+        'schedule' in movie &&
+        Array.isArray(movie.schedule) &&
+        movie.schedule.length > 0 &&
+        Array.isArray(movie.schedule[0].times)
+    );
+};
 
 const MoviesView: React.FC<MoviesViewProps> = ({
     title = 'All Movies',
@@ -24,13 +35,11 @@ const MoviesView: React.FC<MoviesViewProps> = ({
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const { isAuthenticated } = useAuth();
+    const favourites = useSelector((state: RootState) => state.favourites.list);
 
     const totalPages = Math.ceil(movies.length / MOVIES_PER_PAGE);
     const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
     const currentMovies = movies.slice(startIdx, startIdx + MOVIES_PER_PAGE);
-    const favourites = useSelector((state: RootState) => state.favourites.list);
-
-    console.log('favourites', favourites);
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -49,16 +58,21 @@ const MoviesView: React.FC<MoviesViewProps> = ({
             )}
 
             <div className="movies-view__grid">
-                {currentMovies.map((movie) => (
-                    <MovieCard
-                        key={movie.id}
-                        movie={movie}
-                        variant={variant}
-                        showTimes={variant === 'session' ? movie.schedule?.[0]?.times : undefined}
-                        isFavorite={Array.isArray(favourites) && favourites.some((f) => f.id === movie.id)}
-                        showFavouriteButton={isAuthenticated}
-                    />
-                ))}
+                {currentMovies.map((movie) => {
+                    const showTimes =
+                        variant === 'session' && isMovieWithSession(movie) ? movie.schedule[0]?.times : undefined;
+
+                    return (
+                        <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            variant={variant}
+                            showTimes={showTimes}
+                            isFavorite={Array.isArray(favourites) && favourites.some((f) => f.id === movie.id)}
+                            showFavouriteButton={isAuthenticated}
+                        />
+                    );
+                })}
             </div>
 
             {!loading && totalPages > 1 && (
