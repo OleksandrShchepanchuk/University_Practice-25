@@ -1,33 +1,100 @@
-// src/store/slices/favouriteSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Favorites } from '../../types/favorites';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getFavourites, addFavourite, removeFavourite } from '../../api/favourites';
+import type { Movie } from '../../types/movie';
+import type { RootState } from '../../store'; // якщо є
 
 interface FavouriteState {
-  favourites: Favorites[];
+    list: Movie[];
+    loading: boolean;
+    error: string | null;
+    hasLoaded: boolean;
 }
 
 const initialState: FavouriteState = {
-  favourites: [],
+    list: [],
+    loading: false,
+    error: null,
+    hasLoaded: false,
 };
 
-const favouriteSlice = createSlice({
-  name: 'favourite',
-  initialState,
-  reducers: {
-    addFavourite(state, action: PayloadAction<Favorites>) {
-      const exists = state.favourites.some(f => f.movieId === action.payload.movieId);
-      if (!exists) {
-        state.favourites.push(action.payload);
-      }
-    },
-    removeFavourite(state, action: PayloadAction<string>) {
-      state.favourites = state.favourites.filter(f => f.movieId !== action.payload);
-    },
-    clearFavourites(state) {
-      state.favourites = [];
-    },
-  },
+export const loadFavourites = createAsyncThunk('favourites/load', async (_, { rejectWithValue }) => {
+    try {
+        const data = await getFavourites();
+        return data.map((f) => f.movie);
+    } catch (error: any) {
+        return rejectWithValue(error.message || 'Failed to load favourites');
+    }
 });
 
-export const { addFavourite, removeFavourite, clearFavourites } = favouriteSlice.actions;
+export const toggleFavourite = createAsyncThunk<
+    { movieId: string; action: 'add' | 'remove'; movie?: Movie },
+    Movie,
+    { state: RootState }
+>('favourites/toggle', async (movie, { getState, rejectWithValue }) => {
+    const { list } = getState().favourites;
+
+    const exists = list.some((f: Movie) => f.id === movie.id);
+
+    try {
+        if (exists) {
+            await removeFavourite({ movie: movie });
+            return { movieId: movie.id, action: 'remove' };
+        } else {
+            await addFavourite({ movie: movie });
+            return { movieId: movie.id, action: 'add', movie };
+        }
+    } catch (error: any) {
+        return rejectWithValue(error.message || 'Failed to toggle favourite');
+    }
+});
+
+const favouriteSlice = createSlice({
+    name: 'favourites',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadFavourites.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(loadFavourites.fulfilled, (state, action) => {
+                state.loading = false;
+                state.list = action.payload;
+                state.hasLoaded = true;
+            })
+            .addCase(loadFavourites.rejected, (state, action) => {
+                state.loading = false;
+                state.error = (action.payload as string) || 'Failed to load favourites';
+            })
+            .addCase(toggleFavourite.pending, (state, action) => {
+                const movie = action.meta.arg;
+
+                const exists = state.list.some((f) => f.id === movie.id);
+
+                if (exists) {
+                    state.list = state.list.filter((f) => f.id !== movie.id);
+                } else {
+                    state.list.push(movie);
+                }
+            })
+            .addCase(toggleFavourite.fulfilled, (state, action) => {
+                // Опціонально: можна нічого не робити тут
+            })
+            .addCase(toggleFavourite.rejected, (state, action) => {
+                const movie = action.meta.arg;
+
+                const wasTryingToAdd = !state.list.some((f) => f.id === movie.id);
+
+                if (wasTryingToAdd) {
+                    state.list = state.list.filter((f) => f.id !== movie.id);
+                } else {
+                    state.list.push(movie);
+                }
+
+                state.error = (action.payload as string) || 'Failed to toggle favourite';
+            });
+    },
+});
+
 export default favouriteSlice.reducer;

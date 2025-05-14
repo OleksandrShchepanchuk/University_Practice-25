@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig"; // Your initialized Firebase
-import { User } from "../../types/user"; // Updated import for the new User interface
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth } from '../../firebaseConfig'; // Your initialized Firebase
+import { User } from '../../types/user'; // Updated import for the new User interface
 
 type UserState = {
     user: User | null;
@@ -15,18 +15,13 @@ const initialState: UserState = {
     error: null,
 };
 
-// Async thunk for login
 export const loginUser = createAsyncThunk<
-    User, // return type
+    User,
     { email: string; password: string }, // args type
     { rejectValue: string }
->("user/loginUser", async ({ email, password }, thunkAPI) => {
+>('user/loginUser', async ({ email, password }, thunkAPI) => {
     try {
-        const userCredential = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const idToken = await userCredential.user.getIdToken();
         console.log(idToken);
         const user: User = {
@@ -36,7 +31,7 @@ export const loginUser = createAsyncThunk<
         };
         return user;
     } catch (error: unknown) {
-        let errorMessage = "Unknown error";
+        let errorMessage = 'Unknown error';
         if (error instanceof Error) {
             errorMessage = error.message;
         }
@@ -44,12 +39,12 @@ export const loginUser = createAsyncThunk<
     }
 });
 
-export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
+export const logoutUser = createAsyncThunk('user/logoutUser', async () => {
     await signOut(auth);
 });
 
 const userSlice = createSlice({
-    name: "user",
+    name: 'user',
     initialState,
     reducers: {
         setUser(state, action: PayloadAction<User>) {
@@ -71,7 +66,7 @@ const userSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload || "Login failed";
+                state.error = action.payload || 'Login failed';
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.user = null;
