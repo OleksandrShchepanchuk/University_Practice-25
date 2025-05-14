@@ -1,3 +1,5 @@
+import { Movie } from './movie';
+
 export interface Favorites {
-    movieId: string;
+    movie: Movie;
 }

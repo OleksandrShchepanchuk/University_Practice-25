@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MovieCard from '../MovieCard/MovieCard';
 import { MovieWithSession } from '../../../types/movie';
 import './MoviesView.scss';
-
+import { useAuth } from '../../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 type MoviesViewProps = {
     title?: string;
     movies: MovieWithSession[];
@@ -21,10 +23,14 @@ const MoviesView: React.FC<MoviesViewProps> = ({
     variant = 'default',
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const { isAuthenticated } = useAuth();
 
     const totalPages = Math.ceil(movies.length / MOVIES_PER_PAGE);
     const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
     const currentMovies = movies.slice(startIdx, startIdx + MOVIES_PER_PAGE);
+    const favourites = useSelector((state: RootState) => state.favourites.list);
+
+    console.log('favourites', favourites);
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -49,6 +55,8 @@ const MoviesView: React.FC<MoviesViewProps> = ({
                         movie={movie}
                         variant={variant}
                         showTimes={variant === 'session' ? movie.schedule?.[0]?.times : undefined}
+                        isFavorite={Array.isArray(favourites) && favourites.some((f) => f.id === movie.id)}
+                        showFavouriteButton={isAuthenticated}
                     />
                 ))}
             </div>

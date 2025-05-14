@@ -1,90 +1,100 @@
-// src/store/slices/favouriteSlice.ts
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFavourites, addFavourite, removeFavourite } from '../../api/favourites';
-import type { Favorites } from '../../types/favorites';
+import type { Movie } from '../../types/movie';
+import type { RootState } from '../../store'; // якщо є
 
 interface FavouriteState {
-  list: Favorites[];
-  loading: boolean;
-  error: string | null;
-  hasLoaded: boolean;
+    list: Movie[];
+    loading: boolean;
+    error: string | null;
+    hasLoaded: boolean;
 }
 
 const initialState: FavouriteState = {
-  list: [],
-  loading: false,
-  error: null,
-  hasLoaded: false,
+    list: [],
+    loading: false,
+    error: null,
+    hasLoaded: false,
 };
 
-// Async thunk: load all favourites
-export const loadFavourites = createAsyncThunk(
-  'favourites/load',
-  async (_, { rejectWithValue }) => {
+export const loadFavourites = createAsyncThunk('favourites/load', async (_, { rejectWithValue }) => {
     try {
-      return await getFavourites();
+        const data = await getFavourites();
+        return data.map((f) => f.movie);
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to load favourites');
+        return rejectWithValue(error.message || 'Failed to load favourites');
     }
-  }
-);
+});
 
-// Async thunk: toggle favourite (add/remove from server)
-export const toggleFavourite = createAsyncThunk(
-  'favourites/toggle',
-  async ({ movieId }: { movieId: string }, { getState, rejectWithValue }) => {
-    const { list } = (getState() as { favourite: FavouriteState }).favourite;
-    const exists = list.some(f => f.movieId === movieId);
+export const toggleFavourite = createAsyncThunk<
+    { movieId: string; action: 'add' | 'remove'; movie?: Movie },
+    Movie,
+    { state: RootState }
+>('favourites/toggle', async (movie, { getState, rejectWithValue }) => {
+    const { list } = getState().favourites;
+
+    const exists = list.some((f: Movie) => f.id === movie.id);
 
     try {
-      if (exists) {
-        await removeFavourite(movieId); // серверне видалення
-        return { movieId, action: 'remove' };
-      } else {
-        await addFavourite({ movieId }); // додавання фільму (тільки id)
-        return { movieId, action: 'add' };
-      }
+        if (exists) {
+            await removeFavourite({ movie: movie });
+            return { movieId: movie.id, action: 'remove' };
+        } else {
+            await addFavourite({ movie: movie });
+            return { movieId: movie.id, action: 'add', movie };
+        }
     } catch (error: any) {
-      return rejectWithValue(error.message || 'Failed to toggle favourite');
+        return rejectWithValue(error.message || 'Failed to toggle favourite');
     }
-  }
-);
-
+});
 
 const favouriteSlice = createSlice({
-  name: 'favourites',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      // Load all favourites
-      .addCase(loadFavourites.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loadFavourites.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list = action.payload;
-        state.hasLoaded = true;
-      })
-      .addCase(loadFavourites.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string || 'Failed to load favourites';
-      })
-      // Toggle favourite (add/remove)
-      .addCase(toggleFavourite.fulfilled, (state, action) => {
-        const { movieId, action: toggleAction } = action.payload;
-        if (toggleAction === 'add') {
-          state.list.push({ movieId } as Favorites); // додавання
-        } else {
-          state.list = state.list.filter(f => f.movieId !== movieId); // видалення
-        }
-      })
-      .addCase(toggleFavourite.rejected, (state, action) => {
-        state.error = action.payload as string || 'Failed to toggle favourite';
-      });
-  },
+    name: 'favourites',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadFavourites.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(loadFavourites.fulfilled, (state, action) => {
+                state.loading = false;
+                state.list = action.payload;
+                state.hasLoaded = true;
+            })
+            .addCase(loadFavourites.rejected, (state, action) => {
+                state.loading = false;
+                state.error = (action.payload as string) || 'Failed to load favourites';
+            })
+            .addCase(toggleFavourite.pending, (state, action) => {
+                const movie = action.meta.arg;
+
+                const exists = state.list.some((f) => f.id === movie.id);
+
+                if (exists) {
+                    state.list = state.list.filter((f) => f.id !== movie.id);
+                } else {
+                    state.list.push(movie);
+                }
+            })
+            .addCase(toggleFavourite.fulfilled, (state, action) => {
+                // Опціонально: можна нічого не робити тут
+            })
+            .addCase(toggleFavourite.rejected, (state, action) => {
+                const movie = action.meta.arg;
+
+                const wasTryingToAdd = !state.list.some((f) => f.id === movie.id);
+
+                if (wasTryingToAdd) {
+                    state.list = state.list.filter((f) => f.id !== movie.id);
+                } else {
+                    state.list.push(movie);
+                }
+
+                state.error = (action.payload as string) || 'Failed to toggle favourite';
+            });
+    },
 });
 
 export default favouriteSlice.reducer;

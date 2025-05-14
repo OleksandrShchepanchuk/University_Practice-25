@@ -1,20 +1,19 @@
 // src/api/favourites.ts
 
-import axios from 'axios';
+import axios from './axiosInstance';
 import type { Favorites } from '../types/favorites';
 
-// Отримати список улюблених
 export const getFavourites = async (): Promise<Favorites[]> => {
-  const response = await axios.get('/api/favourites'); // або URL до Firebase
-  return response.data;
+    const response = await axios.get('/api/favorites');
+    return response.data;
 };
 
-// Додати фільм в улюблені
 export const addFavourite = async (favourite: Favorites): Promise<void> => {
-  await axios.post('/api/favourites', favourite); // або через Firebase
+    console.log(favourite.movie.id);
+    await axios.post('/api/favorites', { movieId: favourite.movie.id });
 };
 
-// Видалити фільм з улюблених
-export const removeFavourite = async (movieId: string): Promise<void> => {
-  await axios.delete(`/api/favourites/${movieId}`); // або через Firebase
+export const removeFavourite = async (favourite: Favorites): Promise<void> => {
+    const { id } = favourite.movie;
+    await axios.delete(`/api/favorites/${id}`);
 };

@@ -20,10 +20,9 @@ const LoginPage = () => {
         error: moviesError,
         hasLoaded,
     } = useSelector((state: RootState) => state.movies);
-    useSelector((state: RootState) => console.log(state));
 
     useEffect(() => {
-        if (!hasLoaded) {
+        if (!hasLoaded && !moviesLoading && isAuthenticated) {
             dispatch(loadMovies());
         }
     });

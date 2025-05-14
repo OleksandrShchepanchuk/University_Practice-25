@@ -92,31 +92,32 @@ export class FavoritesService extends BaseService<Favorites> {
     }
   }
 
-  async deleteFavorite(id: string, userMeta: any) {
+  async deleteFavorite(movieId: string, userMeta: any) {
     try {
       const userId = userMeta.uid
 
-      const docRef = this.collection.doc(id)
-      const docSnapshot = await docRef.get()
+      const docSnapshot = await this.collection
+        .where('user.id', '==', userId)
+        .where('movie.id', '==', movieId)
+        .limit(1)
+        .get()
 
-      if (!docSnapshot.exists) {
+      if (docSnapshot.empty) {
         throw new Error('Favorite not found')
       }
 
-      const favorite = docSnapshot.data() as Favorites
+      const doc = docSnapshot.docs[0]
+      const favorite = doc.data() as Favorites
 
-      if (!favorite.user || favorite.user.id !== userId) {
+      if (favorite.user.id !== userId && userMeta.roles !== 'ADMIN') {
         throw new Error('Forbidden: You are not allowed to delete this favorite')
       }
 
-      if (userMeta.roles === 'ADMIN' || favorite.user.id === userId) {
-        await docRef.delete()
-        return { message: 'Favorite successfully deleted', id }
-      } else {
-        throw new Error('Forbidden: You are not allowed to delete this favorite')
-      }
+      await doc.ref.delete()
+
+      return { message: 'Favorite successfully deleted', id: doc.id }
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error.message || 'Unexpected error during deletion')
     }
   }
 }
