@@ -24,7 +24,8 @@ const MoviePosterDet: React.FC<Props> = ({ movie }) => {
       <div className="title-row">
         <h2 className="title">{movie.title}</h2>
         <div className="icon-buttons">
-          <button className="icon-button">
+          <button className="icon-button"  onClick={() => window.open(movie.trailer, '_blank')}>
+
             <FaPlay />
           </button>
           <button 
