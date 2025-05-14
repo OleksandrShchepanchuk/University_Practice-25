@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Movie } from '../../../types/movie';
 import './MoviePosterDet.scss';
+import type { AppDispatch } from '../../../store';
+import { useDispatch } from 'react-redux';
+import { toggleFavourite } from '../../../store/slices/favouriteSlice';
 
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { FaPlay } from 'react-icons/fa';
@@ -10,10 +13,14 @@ interface Props {
 
 const MoviePosterDet: React.FC<Props> = ({ movie }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+          e.preventDefault();
+          setIsFavorite(!isFavorite);
+  
+          dispatch(toggleFavourite(movie));
+      };
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
   
   return(
   
@@ -30,7 +37,7 @@ const MoviePosterDet: React.FC<Props> = ({ movie }) => {
           </button>
           <button 
               className={`icon-button ${isFavorite ? 'active' : ''}`}
-              onClick={toggleFavorite}
+              onClick={handleFavoriteClick}
             >
               {isFavorite ? <FaStar /> : <FaRegStar />}
             </button>

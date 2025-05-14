@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
-import { loadFavourites } from './store/slices/favouriteSlice'; // ✅ adjust path
+import { loadFavourites } from './store/slices/favouriteSlice'; 
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
