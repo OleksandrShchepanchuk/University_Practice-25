@@ -1,0 +1,146 @@
+// Variables
+$button-bg-color: rgba(255, 255, 255, 0.2);
+$button-bg-hover: rgba(255, 255, 255, 0.3);
+$button-color: rgb(243, 243, 243);
+$button-color-hover: #f0f0f0;
+$transition-speed: 0.3s;
+$dot-size: 8px;
+$dot-spacing: 8px;
+$dot-color: rgba(255, 255, 255, 0.5);
+$dot-color-active: rgba(255, 255, 255, 0.9);
+
+$screen-md: 1024px;
+$screen-lg: 1440px;
+$screen-xl: 1920px;
+
+.carousel {
+  position: relative;
+  width: 100%; // Mobile: Full width
+  margin: 0; // Mobile: No horizontal margin for full width
+  aspect-ratio: 16 / 9; // Maintain aspect ratio for responsive height
+  overflow: hidden; // Clip contents like images
+  padding: 0;
+  // max-height: 60vh; // Original commented-out value, consider for height capping
+
+  &-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative; // Adjust if using multiple images in a sliding mechanism
+    border-radius: 0; // Mobile: No border radius for full-width images
+  }
+
+  &-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent; // Using transparent as per original commented line
+    color: $button-color;
+    border: none;
+    font-size: 1.8rem; // Mobile: Slightly smaller font size
+    cursor: pointer;
+    padding: 10px 12px; // Mobile: Adjusted padding
+    border-radius: 50%;
+    z-index: 10; // Ensure buttons are above images and dots
+    transition: all $transition-speed ease;
+    backdrop-filter: blur(2px); // Creates a frosted glass effect behind the button
+    opacity: 0.65;
+
+    &.left {
+      left: 10px; // Mobile: Closer to the edge
+    }
+
+    &.right {
+      right: 10px; // Mobile: Closer to the edge
+    }
+
+    &:hover {
+      // background: $button-bg-hover; // Original was commented out
+      transform: translateY(-50%) scale(1.1);
+      color: $button-color-hover;
+      opacity: 1;
+    }
+  }
+
+  // Dots are direct children of carousel, not nested in -button
+  &-dots {
+    position: absolute;
+    bottom: 15px; // Positioned inside the carousel view, adjust as needed
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: $dot-spacing;
+    z-index: 5; // Above images, below buttons if they were to overlap this area
+
+    .dot {
+      width: $dot-size;
+      height: $dot-size;
+      border-radius: 50%;
+      background-color: $dot-color;
+      transition: background-color $transition-speed ease;
+      cursor: pointer;
+
+      &.active {
+        background-color: $dot-color-active;
+      }
+    }
+  }
+}
+
+// Medium screens (tablets and small desktops)
+@media (min-width: $screen-md) {
+  .carousel {
+    width: 85%; // Desktop: Revert to 85% width
+    margin: 0 auto; // Desktop: Center the carousel
+    border-radius: 16px; // Apply border-radius to the carousel container itself for a contained look
+
+    // The explicit `height` percentages from the original (e.g., height: 53%)
+    // are omitted here because `aspect-ratio` is managing the height.
+    // If a specific height or max-height is needed on desktop, consider:
+    // max-height: 53vh; // Example for md, adjust per breakpoint
+
+    &-image {
+      // On desktop, image inherits rounded corners from parent if parent has overflow:hidden and border-radius.
+      // Explicitly setting it ensures consistency if overflow behavior changes.
+      border-radius: 16px; // Match carousel container's radius
+    }
+
+    &-button {
+      font-size: 2rem; // Revert to original default font size for md+
+      padding: 12px 16px; // Revert to original default padding for md+
+
+      &.left {
+        left: 20px; // Revert to original default position for md+
+      }
+
+      &.right {
+        right: 20px; // Revert to original default position for md+
+      }
+    }
+  }
+}
+
+// Large screens (desktops)
+@media (min-width: $screen-lg) {
+  .carousel {
+    // Example if max-height is desired for this breakpoint:
+    // max-height: 58vh;
+
+    &-button {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+// Extra-large screens (large desktops)
+@media (min-width: $screen-xl) {
+  .carousel {
+    // Example if max-height is desired for this breakpoint:
+    // max-height: 60vh; // Matches original commented-out max-height
+
+    &-button {
+      font-size: 3rem;
+    }
+  }
+}
