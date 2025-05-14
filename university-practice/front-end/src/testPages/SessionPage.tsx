@@ -11,9 +11,15 @@ const SessionsPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { list: sessions, loading, error, hasLoaded } = useSelector((state: RootState) => state.sessions);
 
+<<<<<<< HEAD
     useEffect(() => {
         // if (!hasLoaded) dispatch(loadSessions());
     }, [dispatch, hasLoaded]);
+=======
+    // useEffect(() => {
+    //     if (!hasLoaded) dispatch(loadSessions());
+    // }, [dispatch, hasLoaded]);
+>>>>>>> 8202771e5b050ec5c686a02758af7904b5c5ef4b
 
     // Group sessions by date
     const grouped: Record<string, MovieWithSession[]> = {};
@@ -27,10 +33,8 @@ const SessionsPage = () => {
                 price: session.price,
                 schedule: [sched],
             });
-            console.log('session', grouped);
         });
     });
-    console.log(grouped);
 
     const sortedDates = Object.keys(grouped).sort();
 

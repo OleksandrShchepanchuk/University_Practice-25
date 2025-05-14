@@ -7,9 +7,9 @@ const SessionsPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { list: sessions, loading } = useSelector((state: RootState) => state.sessions);
 
-    useEffect(() => {
-        // dispatch(loadSessions());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     // dispatch(loadSessions());
+    // }, [dispatch]);
 
     return (
         <div style={{ padding: 20 }}>
