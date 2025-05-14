@@ -18,6 +18,17 @@ export class FavoritesService extends BaseService<Favorites> {
     try {
       const now = time().toDate()
 
+      const existingSnapshot = await this.collection
+        .where('user.id', '==', userMeta.uid)
+        .where('movie.id', '==', dto.movieId)
+        .limit(1)
+        .get()
+
+      if (!existingSnapshot.empty) {
+        const existingFavorite = existingSnapshot.docs[0]
+        throw new Error('Favorite already exists')
+      }
+
       const movieDoc = await this.firestore.collection('movies').doc(dto.movieId).get()
 
       if (!movieDoc.exists) {
