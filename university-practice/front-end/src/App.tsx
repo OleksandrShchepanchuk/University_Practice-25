@@ -1,6 +1,7 @@
 // src/App.tsx
 import LoginPage from './pages/LoginPage/LoginPage';
 import MoviePage from './pages/MoviePage/MoviePage';
+import Header from './components/layout/Header/Header.js';
 import { Routes, Route, Link } from 'react-router-dom';
 import AuthProvider from './components/common/AuthProvider';
 import SessionPage from './testPages/SessionPage';
@@ -23,11 +24,13 @@ const App = () => {
 
     return (
         <AuthProvider>
+            <Header></Header>
             <div>
                 {/* <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
                     <Link to="/" style={{ marginRight: 10 }}>
                         Login
                     </Link>
+                    <Link to="/s">Sessions</Link>
                 </nav> */}
 
                 <Routes>
@@ -35,6 +38,7 @@ const App = () => {
                     <Route path="/s" element={<SessionPage />} />
                     <Route path="/movies/:id" element={<MoviePage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    {/* <Route path='/header' element={<Header />} />  */}
                 </Routes>
             </div>
         </AuthProvider>
