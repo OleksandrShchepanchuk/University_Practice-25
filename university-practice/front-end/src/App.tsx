@@ -1,64 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// src/App.tsx
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { useState } from 'react'
-import { auth } from './firebaseConfig'
+import Header from './components/layout/Header/Header.js';
+import { Routes, Route, Link } from 'react-router-dom';
+import LoginPage from './testPages/LoginPage';
+import AuthProvider from './components/common/AuthProvider';
+import SessionsPage from './testPages/SessionPage';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from './store';
+import { useEffect } from 'react';
+import { useAuth } from './hooks/useAuth';
+import { loadFavourites } from './store/slices/favouriteSlice'; 
 
-function App() {
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [idToken, setIdToken] = useState<string | null>(null)
-	const [error, setError] = useState<string | null>(null)
+const App = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { isAuthenticated } = useAuth();
+    const { hasLoaded, loading, error } = useSelector((state: RootState) => state.favourites);
 
-	const handleLogin = async () => {
-		try {
-			const userCredential = await signInWithEmailAndPassword(
-				auth,
-				email,
-				password
-			)
-			const token = await userCredential.user.getIdToken()
-			setIdToken(token)
-			setError(null)
-		} catch (err: any) {
-			setError(err.message)
-			setIdToken(null)
-		}
-	}
+    useEffect(() => {
+        if (isAuthenticated && !hasLoaded && !loading && !error) {
+            dispatch(loadFavourites());
+        }
+    }, [dispatch, isAuthenticated, hasLoaded, loading, error]);
 
-	return (
-		<div style={{ padding: 20 }}>
-			<h1>Login to get ID Token</h1>
-			<input
-				type='email'
-				placeholder='Email'
-				value={email}
-				onChange={e => setEmail(e.target.value)}
-				style={{ display: 'block', marginBottom: 10 }}
-			/>
-			<input
-				type='password'
-				placeholder='Password'
-				value={password}
-				onChange={e => setPassword(e.target.value)}
-				style={{ display: 'block', marginBottom: 10 }}
-			/>
-			<button onClick={handleLogin}>Login</button>
+    return (
+        <AuthProvider>
+            <Header></Header>
+            <div>
+                {/* <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
+                    <Link to="/" style={{ marginRight: 10 }}>
+                        Login
+                    </Link>
+                    <Link to="/s">Sessions</Link>
+                </nav> */}
 
-			{idToken && (
-		<div>
-					<h2>ID Token:</h2>
-					<textarea
-						value={idToken}
-						readOnly
-						style={{ width: '100%', height: 200 }}
-					/>
-				</div>
-			)}
+                <Routes>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/s" element={<SessionsPage />} />
+                    {/* <Route path='/header' element={<Header />} />  */}
+                </Routes>
+            </div>
+        </AuthProvider>
+    );
+};
 
-			{error && <p style={{ color: 'red' }}>{error}</p>}
-		</div>
-	)
-}
-
-export default App
+export default App;
