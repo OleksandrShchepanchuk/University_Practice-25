@@ -1,3 +1,5 @@
+// src/App.tsx
+import MoviePage from './pages/MoviePage/MoviePage';
 import Header from './components/layout/Header/Header.js';
 import { Routes, Route, Link } from 'react-router-dom';
 import AuthProvider from './components/common/AuthProvider';
@@ -5,10 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
-import { loadFavourites } from './store/slices/favouriteSlice'; 
 import LoginPage from './pages/LoginPage/LoginPage';
 import MainPage from './pages/Main/Main';
 import SessionsPage from './pages/Sessions/Sessions';
+import { loadFavourites } from './store/slices/favouriteSlice';
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -29,6 +31,7 @@ const App = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/" element={<MainPage />} />
                     <Route path="/sessions" element={<SessionsPage />} />
+                    <Route path="/movies/:id" element={<MoviePage />} />
                 </Routes>
             </div>
         </AuthProvider>

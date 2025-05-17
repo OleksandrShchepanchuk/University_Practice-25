@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer'
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsNumber, IsPositive, IsString, ValidateNested } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsPositive, IsString, ValidateNested } from 'class-validator'
 import { ScheduleDto } from './schedule.dto'
 
 export class CreateMoviesSessionDto {
@@ -11,9 +11,7 @@ export class CreateMoviesSessionDto {
   @IsNumber()
   price: number
 
-  @IsArray()
-  @ArrayNotEmpty()
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => ScheduleDto)
-  schedule: ScheduleDto[]
+  schedule: ScheduleDto
 }
