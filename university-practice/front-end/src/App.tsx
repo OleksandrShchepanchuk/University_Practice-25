@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import MainPage from './pages/Main/Main';
 import SessionsPage from './pages/Sessions/Sessions';
 import { loadFavourites } from './store/slices/favouriteSlice';
+import BookingPage from './pages/BookingPage/BookingPage.js';
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/sessions" element={<SessionsPage />} />
                     <Route path="/movies/:id" element={<MoviePage />} />
+                    <Route path="/tickets/:movieId" element={<BookingPage />} />
                 </Routes>
             </div>
         </AuthProvider>

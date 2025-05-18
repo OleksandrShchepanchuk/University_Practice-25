@@ -18,7 +18,7 @@ export class CreateMoviesSessionDto {
   @IsOptional()
   @IsPositive()
   @IsNumber()
-  maxSeats: number = 30 // default value
+  maxSeats: number = 30
 
   @IsOptional()
   @IsArray()

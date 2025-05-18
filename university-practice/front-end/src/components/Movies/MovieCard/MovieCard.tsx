@@ -11,7 +11,10 @@ type Variant = 'default' | 'session';
 
 interface MovieCardProps {
     movie: Movie | MovieWithSession;
-    showTimes?: string[];
+    showTimes?: Array<{
+        time: string;
+        sessionId: string;
+    }>;
     variant?: Variant;
     isFavorite: boolean;
     showFavouriteButton: boolean;
@@ -38,33 +41,44 @@ const MovieCard: React.FC<MovieCardProps> = ({
     const link = variant === 'session' ? `/tickets/${movie.id}` : `/movies/${movie.id}`;
 
     return (
-        <Link to={link} className="movie-card">
-            <div className="movie-card__image">
-                <img src={movie.poster} alt={movie.title} />
-            </div>
-            <div className="movie-card__header">
-                <div className="movie-card__info">
-                    {showFavouriteButton && (
-                        <button
-                            className={isFavorite ? 'movie-card__fav-btn active' : 'movie-card__fav-btn'}
-                            onClick={handleFavoriteClick}
-                        >
-                            {isFavorite ? <FaStar /> : <FaRegStar />}
-                        </button>
-                    )}
-                    <div className="movie-card__title">{movie.title}</div>
+        <div className="movie-card">
+            <Link to={link}>
+                <div className="movie-card__image">
+                    <img src={movie.poster} alt={movie.title} />
                 </div>
-                {variant === 'session' && showTimes && (
-                    <div className="movie-card__showtimes">
-                        <div className="movie-card__times">
-                            {showTimes.map((time) => (
-                                <span key={time}>{time}</span>
-                            ))}
-                        </div>
+                <div className="movie-card__header">
+                    <div className="movie-card__info">
+                        {showFavouriteButton && (
+                            <button
+                                className={isFavorite ? 'movie-card__fav-btn active' : 'movie-card__fav-btn'}
+                                onClick={handleFavoriteClick}
+                            >
+                                {isFavorite ? <FaStar /> : <FaRegStar />}
+                            </button>
+                        )}
+                        <div className="movie-card__title">{movie.title}</div>
                     </div>
-                )}
-            </div>
-        </Link>
+                </div>
+            </Link>
+            {variant === 'session' && showTimes && (
+                <div className="movie-card__showtimes">
+                    <div className="movie-card__times">
+                        {showTimes.map(({ time, sessionId }) => {
+                            return (
+                                <Link
+                                    to={`/tickets/${movie.id}?session=${sessionId}`}
+                                    className="movie-card__time"
+                                    key={sessionId + time}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <span>{time}</span>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 

@@ -1,5 +1,5 @@
 export interface Booking {
     sessionId: string;
-    seats: number;
+    seats: number[];
     totalPrice: number;
 }

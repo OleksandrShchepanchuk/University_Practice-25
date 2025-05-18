@@ -1,53 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@700&display=swap');
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: flex-end; // все з правого боку
-  align-items: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end; // все з правого боку
+    align-items: center;
+    z-index: 1000000;
 
-  background-color: rgba(0, 0, 0, 0); // прозорий фон
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0); // прозорий фон
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
 .nav-group {
-  display: flex;
-  align-items: center;
-  gap: 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
 }
 
 .nav {
-  display: flex;
-  gap: 52px; // відстань між пунктами меню
-  font-family: 'Maitree';
-  font-weight: 700;
-  font-size: 15px;
-  color: #FFFFFFCC;
+    display: flex;
+    gap: 52px; // відстань між пунктами меню
+    font-family: 'Maitree';
+    font-weight: 700;
+    font-size: 15px;
+    color: #ffffffcc;
 
-  a {
-    text-decoration: none;
-    color: #FFFFFFCC; // початковий колір
+    a {
+        text-decoration: none;
+        color: #ffffffcc; // початковий колір
 
-    &:hover {
-      color: white; // при наведенні текст стане білим
+        &:hover {
+            color: white; // при наведенні текст стане білим
+        }
     }
-  }
 }
 
 .user-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #FFFFFFCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ffffffcc;
 
-  &:hover {
-    color: white; // при наведенні іконка стане білою
-  }
+    &:hover {
+        color: white; // при наведенні іконка стане білою
+    }
 }

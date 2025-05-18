@@ -16,6 +16,9 @@ export interface MovieWithSession extends Movie {
     price: number;
     schedule: Array<{
         date: string;
-        times: string[];
+        times: Array<{
+            time: string;
+            sessionId: string;
+        }>;
     }>;
 }

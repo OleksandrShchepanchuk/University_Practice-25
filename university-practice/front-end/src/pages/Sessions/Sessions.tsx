@@ -17,20 +17,22 @@ const Sessions = () => {
         if (!hasLoaded && !loading && !error) dispatch(loadSessions());
     }, [dispatch]);
 
-    // Групуємо сеанси по датам та фільмам
     const grouped: Record<string, MovieWithSession[]> = {};
 
     sessions.forEach((session) => {
         const date = session.schedule.date;
         const time = session.schedule.times;
         const movieId = session.movie.id;
+        if (!time || !session.id) return;
 
         if (!grouped[date]) grouped[date] = [];
 
         const existingMovie = grouped[date].find((item) => item.id === movieId);
 
+        const sessionTimeObj = { time, sessionId: session.id };
+
         if (existingMovie) {
-            existingMovie.schedule[0].times.push(time);
+            existingMovie.schedule[0].times.push(sessionTimeObj);
         } else {
             grouped[date].push({
                 ...session.movie,
@@ -38,7 +40,7 @@ const Sessions = () => {
                 schedule: [
                     {
                         date,
-                        times: [time],
+                        times: [sessionTimeObj],
                     },
                 ],
             });
@@ -49,7 +51,6 @@ const Sessions = () => {
     const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-    // Отримуємо всі доступні часи для обраної дати
     const allTimes = grouped[selectedDate]?.flatMap((movie) => movie.schedule.flatMap((sched) => sched.times)) || [];
 
     const uniqueTimes = [...new Set(allTimes)].sort();
@@ -99,8 +100,8 @@ const Sessions = () => {
                                 >
                                     <option value="">Увесь день</option>
                                     {uniqueTimes.map((time) => (
-                                        <option key={time} value={time}>
-                                            {time}
+                                        <option key={time.time} value={time.time}>
+                                            {time.time}
                                         </option>
                                     ))}
                                 </select>
@@ -120,7 +121,7 @@ const Sessions = () => {
                                     ? movie.schedule
                                           .map((sched) => ({
                                               ...sched,
-                                              times: sched.times.filter((time) => time === selectedTime),
+                                              times: sched.times.filter((time) => time.time === selectedTime),
                                           }))
                                           .filter((sched) => sched.times.length > 0)
                                     : movie.schedule,
