@@ -7,6 +7,7 @@ import { MovieWithSession } from '../../types/movie';
 import { format, parseISO } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import styles from './Sessions.module.scss';
+import Loader from '../../components/common/Loader/Loader';
 
 const Sessions = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -34,10 +35,12 @@ const Sessions = () => {
             grouped[date].push({
                 ...session.movie,
                 price: session.price,
-                schedule: [{
-                    date,
-                    times: [time],
-                }],
+                schedule: [
+                    {
+                        date,
+                        times: [time],
+                    },
+                ],
             });
         }
     });
@@ -47,11 +50,7 @@ const Sessions = () => {
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
     // Отримуємо всі доступні часи для обраної дати
-    const allTimes = grouped[selectedDate]?.flatMap(movie => 
-        movie.schedule.flatMap(sched => 
-            sched.times
-        )
-    ) || [];
+    const allTimes = grouped[selectedDate]?.flatMap((movie) => movie.schedule.flatMap((sched) => sched.times)) || [];
 
     const uniqueTimes = [...new Set(allTimes)].sort();
 
@@ -66,7 +65,7 @@ const Sessions = () => {
         <div className={styles.main}>
             <div className={styles.background}></div>
             <div className={styles.page}>
-                {loading && <p>Loading...</p>}
+                {loading && <Loader />}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className={styles.controls}>
@@ -112,20 +111,24 @@ const Sessions = () => {
                 </div>
 
                 {grouped[selectedDate] && (
-                    <MoviesView 
-                        title="" 
-                        movies={grouped[selectedDate].map(movie => ({
-                            ...movie,
-                            schedule: selectedTime 
-                                ? movie.schedule.map(sched => ({
-                                    ...sched,
-                                    times: sched.times.filter(time => time === selectedTime)
-                                })).filter(sched => sched.times.length > 0)
-                                : movie.schedule
-                        })).filter(movie => movie.schedule.length > 0)} 
-                        loading={false} 
-                        error={null} 
-                        variant="session" 
+                    <MoviesView
+                        title=""
+                        movies={grouped[selectedDate]
+                            .map((movie) => ({
+                                ...movie,
+                                schedule: selectedTime
+                                    ? movie.schedule
+                                          .map((sched) => ({
+                                              ...sched,
+                                              times: sched.times.filter((time) => time === selectedTime),
+                                          }))
+                                          .filter((sched) => sched.times.length > 0)
+                                    : movie.schedule,
+                            }))
+                            .filter((movie) => movie.schedule.length > 0)}
+                        loading={false}
+                        error={null}
+                        variant="session"
                     />
                 )}
             </div>

@@ -17,8 +17,8 @@ export class BookingService extends BaseService<Booking> {
   async createBooking(dto: CreateBookingDto, userMeta: any): Promise<Booking> {
     try {
       const now = time().toDate()
-
-      const sessionDoc = await this.firestore.collection('movies-session').doc(dto.sessionId).get()
+      const sessionRef = this.firestore.collection('movies-session').doc(dto.sessionId)
+      const sessionDoc = await sessionRef.get()
 
       if (!sessionDoc.exists) {
         throw new Error('Session not found')
@@ -32,6 +32,13 @@ export class BookingService extends BaseService<Booking> {
         throw new Error('User not found')
       }
 
+      const alreadyBooked = session.bookedSeats || []
+
+      const conflicts = dto.seats.filter((seat) => alreadyBooked.includes(seat))
+      if (conflicts.length > 0) {
+        throw new Error(`Seats already booked: ${conflicts.join(', ')}`)
+      }
+
       const user = userDoc.data() as User
 
       const data: Booking = {
@@ -43,15 +50,20 @@ export class BookingService extends BaseService<Booking> {
         updatedAt: now,
       }
 
-      const docRef = await this.collection.add(data)
-      const snapshot = await docRef.get()
+      let newBooking: Booking
 
-      return {
-        id: snapshot.id,
-        ...snapshot.data(),
-      } as Booking
+      await this.firestore.runTransaction(async (t) => {
+        const newBookedSeats = [...alreadyBooked, ...dto.seats]
+        t.update(sessionRef, { bookedSeats: newBookedSeats })
+
+        const docRef = this.collection.doc()
+        t.set(docRef, data)
+        newBooking = { id: docRef.id, ...data }
+      })
+
+      return newBooking!
     } catch (error) {
-      throw new Error(error)
+      throw new Error(error.message || 'Booking failed')
     }
   }
 

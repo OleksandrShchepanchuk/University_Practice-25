@@ -3,6 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { auth } from '../../firebaseConfig';
 import { setUser, clearUser } from '../../store/slices/usersSlice';
+import Loader from './Loader/Loader';
 
 type Props = {
     children: React.ReactNode;
@@ -32,7 +33,7 @@ const AuthProvider = ({ children }: Props) => {
     }, [dispatch]);
 
     if (!authChecked) {
-        return <div>Loading...</div>; // You can use a Spinner or Skeleton here
+        return <Loader />;
     }
 
     return <>{children}</>;

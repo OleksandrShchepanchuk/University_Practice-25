@@ -6,7 +6,7 @@ export class Movie extends BaseModel {
   title: string
   poster: string
   description: string
-  genre: string
+  genre: string[]
   rating: number
   year: number
   trailer: string

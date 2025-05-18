@@ -6,6 +6,7 @@ import MoviesView from '../components/Movies/MoviesView/MoviesView';
 import { MovieWithSession } from '../types/movie';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
+import Loader from '../components/common/Loader/Loader';
 
 const SessionsPage = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -47,7 +48,7 @@ const SessionsPage = () => {
     console.log('grouped', grouped);
     return (
         <div className="grouped-sessions-page">
-            {loading && <p>Loading...</p>}
+            {loading && <Loader />}
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             <div className="date-selector" style={{ marginBottom: '1rem' }}>

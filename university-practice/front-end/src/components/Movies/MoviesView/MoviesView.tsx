@@ -6,6 +6,7 @@ import './MoviesView.scss';
 import { useAuth } from '../../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import Loader from '../../common/Loader/Loader';
 
 type MoviesViewProps = {
     title?: string;
@@ -51,7 +52,7 @@ const MoviesView: React.FC<MoviesViewProps> = ({
         <section className="movies-view">
             <h1 className="movies-view__title">{title}</h1>
 
-            {loading && <p className="movies-view__status">Loading movies...</p>}
+            {loading && <Loader />}
             {error && <p className="movies-view__status movies-view__status--error">Error: {error}</p>}
             {!loading && !error && currentMovies.length === 0 && (
                 <p className="movies-view__status">No movies available.</p>

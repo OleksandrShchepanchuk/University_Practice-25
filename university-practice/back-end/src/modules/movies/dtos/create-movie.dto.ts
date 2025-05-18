@@ -11,8 +11,10 @@ export class CreateMovieDto {
   @IsString()
   description: string
 
-  @IsString()
-  genre: string
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  genre: string[]
 
   @IsNumber()
   @Min(0)

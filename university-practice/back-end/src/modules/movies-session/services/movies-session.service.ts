@@ -26,11 +26,12 @@ export class MoviesSessionService extends BaseService<MoviesSession> {
       const movie = movieDoc.data() as Movie
 
       const serializeSchedule = classToPlain(data.schedule)
-
       const movieSessionData = {
         movie: { id: data.movieId, ...movie },
         price: data.price,
         schedule: serializeSchedule as Schedule,
+        maxSeats: data.maxSeats ?? 30,
+        bookedSeats: data.bookedSeats ?? [],
       }
 
       const docRef = await this.collection.add(movieSessionData)

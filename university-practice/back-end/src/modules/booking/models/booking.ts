@@ -5,6 +5,6 @@ import { User } from 'src/modules/users/models/user'
 export class Booking extends BaseModel {
   session: MoviesSession
   user: User
-  seats: number
+  seats: number[]
   totalPrice: number
 }
