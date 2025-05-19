@@ -12,7 +12,7 @@ export class MovieService extends BaseService<Movie> {
   }
 
   async update(id: string, dto: UpdateMovieDto): Promise<Movie> {
-    await this.collection.doc(id).update(dto as any)
+    await this.collection.doc(id).update({ ...dto })
 
     const updatedDoc = await this.collection.doc(id).get()
     const updatedMovie = updatedDoc.data() as Movie
@@ -33,7 +33,7 @@ export class MovieService extends BaseService<Movie> {
       const session = doc.data()
       if (session.movie?.id === updatedMovie.id) {
         batch.update(doc.ref, {
-          movie: updatedMovie,
+          movie: { ...updatedMovie },
         })
         changed++
       }
