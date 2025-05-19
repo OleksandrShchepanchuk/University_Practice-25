@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import { loadFavourites } from './store/slices/favouriteSlice';
+import SessionEditor from './pages/AdminPanel/AdminSessionsPage.js';
 
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,7 @@ const App = () => {
 
     return (
         <AuthProvider>
-            <Header></Header>
+            {/*<Header></Header>*/}
             <div>
                 {/* <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
                     <Link to="/" style={{ marginRight: 10 }}>
@@ -38,6 +39,7 @@ const App = () => {
                     <Route path="/s" element={<SessionPage />} />
                     <Route path="/movies/:id" element={<MoviePage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/admin/sessions/:id" element={<SessionEditor />} />
                     {/* <Route path='/header' element={<Header />} />  */}
                 </Routes>
             </div>
