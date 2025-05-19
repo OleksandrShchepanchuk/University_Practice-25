@@ -1,5 +1,6 @@
 .movies-view {
     .movie-card {
+
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -36,6 +37,8 @@
             gap: 8px;
 
             .movie-card__title {
+                font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
+                text-decoration: none;
                 font-size: 1rem;
                 font-weight: 600;
                 color: var(--text-color, #333);

@@ -49,11 +49,11 @@
 }
 
 .selectLabel {
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: 200;
     color: #333;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.05px;
 }
 
 .selectWrapper {
@@ -67,7 +67,7 @@
     margin-bottom: 30px;
 }
 
-.dateSelect, .timeSelect {
+.dateSelect, .timeSelect,.genreSelect {
     appearance: none;
     padding: 20px 35px 20px 15px;
     font-size: 12px;

@@ -64,4 +64,30 @@
             }
         }
     }
+    &__search {
+        margin-bottom: 2rem;
+        margin-left: 0;
+        width: 300px; // Adjust width as needed
+        align-self: flex-start;
+    }
+
+    &__search-input {
+        width: 100%;
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        background: transparent;
+        color: #fff;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:focus {
+            outline: none;
+            border-bottom-color: #fff;
+        }
+    }
 }
