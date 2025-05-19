@@ -1,7 +1,7 @@
 // src/App.tsx
 import MoviePage from './pages/MoviePage/MoviePage';
 import Header from './components/layout/Header/Header.js';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import AuthProvider from './components/common/AuthProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
@@ -24,22 +24,31 @@ const App = () => {
             dispatch(loadFavourites());
         }
     }, [dispatch, isAuthenticated, hasLoaded, loading, error]);
-
     return (
         <AuthProvider>
-            <Header></Header>
-            <div>
-                <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/" element={<Main />} />
-                    <Route path="/sessions" element={<SessionsPage />} />
-                    <Route path="/movies/:id" element={<MoviePage />} />
-                    <Route path="/tickets/:movieId" element={<BookingPage />} />
-                    <Route path="/admin" element={<AdminPage />} />
-                    <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+            <Header />
 
-                </Routes>
-            </div>
+            <Routes>
+                {isAuthenticated ? (
+                    <>
+                        <Route path="/" element={<Main />} />
+                        <Route path="/sessions" element={<SessionsPage />} />
+                        <Route path="/movies/:id" element={<MoviePage />} />
+                        <Route path="/tickets/:movieId" element={<BookingPage />} />
+                        <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+
+                        {/* fallback */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </>
+                ) : (
+                    <>
+                        <Route path="/login" element={<LoginPage />} />
+                        {/* redirect everything else to /login */}
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </>
+                )}
+            </Routes>
         </AuthProvider>
     );
 };

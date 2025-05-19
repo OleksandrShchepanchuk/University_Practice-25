@@ -23,11 +23,13 @@ export const loginUser = createAsyncThunk<
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const idToken = await userCredential.user.getIdToken();
-        console.log(idToken);
+        const { claims } = await userCredential.user.getIdTokenResult(true); // force refresh
+        const role = claims.role as string;
         const user: User = {
             uid: userCredential.user.uid,
             email: userCredential.user.email,
             displayName: userCredential.user.displayName,
+            roles: (claims.roles as string) || 'USER',
         };
         return user;
     } catch (error: unknown) {
