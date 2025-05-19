@@ -1,0 +1,77 @@
+.admin-panel {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .admin-header {
+        margin-bottom: 2rem;
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #848484;
+            padding-bottom: 1rem;
+
+            .tab {
+                padding: 0.5rem 1rem;
+                border: none;
+                background: none;
+                font-size: 1.1rem;
+                cursor: pointer;
+                color: #666;
+                position: relative;
+
+                &.active {
+                    color: #C81313;
+                    font-weight: 600;
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        bottom: -1rem;
+                        left: 0;
+                        width: 100%;
+                        height: 2px;
+                        background: #C81313;
+                    }
+                }
+
+                &:hover {
+                    color: #C81313;
+                }
+            }
+        }
+    }
+
+    .admin-content {
+        .add-button {
+            font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
+            font-weight: 400;
+            background: #C81313;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+
+            &:hover {
+                background: #a61010;
+            }
+        }
+
+        .movies-list,
+        .sessions-list {
+            background: #303030;
+            border-radius: 8px;
+            padding: 1rem;
+            // box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    }
+}

@@ -8,11 +8,12 @@ import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import LoginPage from './pages/LoginPage/LoginPage';
-import MainPage from './pages/Main/Main';
+import Main from './pages/Main/Main';
 import SessionsPage from './pages/Sessions/Sessions';
 import { loadFavourites } from './store/slices/favouriteSlice';
 import BookingPage from './pages/BookingPage/BookingPage.js';
-
+import AdminPage from './pages/AdminPage/AdminPage.js';
+import BookingHistoryPage from './pages/BookingHistoryPage/BookingHistoryPage.js';
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated } = useAuth();
@@ -30,10 +31,13 @@ const App = () => {
             <div>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/" element={<MainPage />} />
+                    <Route path="/" element={<Main />} />
                     <Route path="/sessions" element={<SessionsPage />} />
                     <Route path="/movies/:id" element={<MoviePage />} />
                     <Route path="/tickets/:movieId" element={<BookingPage />} />
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+
                 </Routes>
             </div>
         </AuthProvider>

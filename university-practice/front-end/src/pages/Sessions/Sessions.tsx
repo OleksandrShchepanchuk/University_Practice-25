@@ -50,16 +50,27 @@ const Sessions = () => {
     const sortedDates = Object.keys(grouped).sort();
     const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    const [selectedGenre, setSelectedGenre] = useState<string>('');
+
 
     const allTimes = grouped[selectedDate]?.flatMap((movie) => movie.schedule.flatMap((sched) => sched.times)) || [];
 
     const uniqueTimes = [...new Set(allTimes)].sort();
+    const uniqueGenres = [...new Set(
+        Object.values(grouped)
+            .flat()
+            .map(movie => movie.genre)
+    )].sort();
 
     const formatDateLabel = (date: string) => {
         const parsedDate = parseISO(date);
         return date === format(new Date(), 'yyyy-MM-dd')
             ? 'СЬОГОДНІ'
             : format(parsedDate, 'd MMMM yyyy', { locale: uk }).toUpperCase();
+    };
+    const getFilteredMovies = (movies: MovieWithSession[]) => {
+        if (!selectedGenre) return movies;
+        return movies.filter(movie => movie.genre === selectedGenre);
     };
 
     return (
@@ -93,6 +104,7 @@ const Sessions = () => {
                     {uniqueTimes.length > 0 && (
                         <div className={styles.selectContainer}>
                             <div className={styles.selectWrapper}>
+                                
                                 <select
                                     value={selectedTime || ''}
                                     onChange={(e) => setSelectedTime(e.target.value || null)}
@@ -109,12 +121,34 @@ const Sessions = () => {
                             </div>
                         </div>
                     )}
+
+                    <div className={styles.selectContainer}>
+                        <div className={styles.selectWrapper}>
+                            <select
+                                value={selectedGenre}
+                                onChange={(e) => setSelectedGenre(e.target.value)}
+                                className={styles.genreSelect}
+                            >
+                                <option value="">Усі жанри</option>
+                                {uniqueGenres.map((genre) => (
+                                    <option key={genre} value={genre}>
+                                        {genre}
+                                    </option>
+                                ))}
+                            </select>
+                            <div className={styles.selectArrow}>▼</div>
+                        </div>
+                    </div>
+
+                    
+
+
                 </div>
 
                 {grouped[selectedDate] && (
                     <MoviesView
                         title=""
-                        movies={grouped[selectedDate]
+                        movies={getFilteredMovies(grouped[selectedDate])
                             .map((movie) => ({
                                 ...movie,
                                 schedule: selectedTime

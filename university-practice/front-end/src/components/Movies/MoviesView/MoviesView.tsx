@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import MovieCard from '../MovieCard/MovieCard';
 import { MovieWithSession } from '../../../types/movie';
 import { Movie } from '../../../types/movie';
@@ -28,29 +28,43 @@ const isMovieWithSession = (movie: Movie | MovieWithSession): movie is MovieWith
 };
 
 const MoviesView: React.FC<MoviesViewProps> = ({
-    title = 'All Movies',
+    title = 'Movies',
     movies,
     loading,
     error,
     variant = 'default',
 }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    
     const { isAuthenticated } = useAuth();
     const favourites = useSelector((state: RootState) => state.favourites.list);
-
-    const totalPages = Math.ceil(movies.length / MOVIES_PER_PAGE);
-    const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
-    const currentMovies = movies.slice(startIdx, startIdx + MOVIES_PER_PAGE);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
         }
-    };
+    }; 
+    
+    const filteredMovies = movies.filter(movie => {
+        const query = searchQuery.toLowerCase();
+        return movie.title.toLowerCase().includes(query) || 
+               movie.genre.toLowerCase().includes(query) || 
+               movie.year.toString().includes(query);
+    });
+    const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
+    const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
+    const currentMovies = filteredMovies.slice(startIdx, startIdx + MOVIES_PER_PAGE);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
+
 
     return (
         <section className="movies-view">
-            <h1 className="movies-view__title">{title}</h1>
+            {/* <h1 className="movies-view__title">{title}</h1> */}
+
 
             {loading && <Loader />}
             {error && <p className="movies-view__status movies-view__status--error">Error: {error}</p>}
@@ -58,6 +72,15 @@ const MoviesView: React.FC<MoviesViewProps> = ({
                 <p className="movies-view__status">No movies available.</p>
             )}
 
+            <div className="movies-view__search">
+                <input
+                    type="text"
+                    placeholder="Пошук"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="movies-view__search-input"
+                />
+            </div>
             <div className="movies-view__grid">
                 {currentMovies.map((movie) => {
                     const showTimes =
