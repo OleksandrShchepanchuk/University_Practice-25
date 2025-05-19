@@ -1,5 +1,14 @@
 import { Type } from 'class-transformer'
-import { IsNumber, IsObject, IsOptional, IsPositive, ValidateNested } from 'class-validator'
+import {
+  IsArray,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsPositive,
+  ValidateNested,
+  ArrayUnique,
+  IsInt,
+} from 'class-validator'
 import { UpdateMovieDto } from 'src/modules/movies/dtos/update-movie.dto'
 import { ScheduleDto } from './schedule.dto'
 
@@ -19,4 +28,15 @@ export class UpdateMoviesSessionDto {
   @ValidateNested()
   @Type(() => ScheduleDto)
   schedule?: ScheduleDto
+
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  maxSeats?: number
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsInt({ each: true })
+  bookedSeats?: number[]
 }

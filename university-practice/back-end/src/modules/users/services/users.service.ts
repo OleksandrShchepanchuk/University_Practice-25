@@ -21,17 +21,19 @@ export class UserService extends BaseService<User> {
     const auth = this.firebaseApp.auth()
 
     try {
-      const userRecord = await auth.createUser({
+      const { uid } = await auth.createUser({
         email: user.email,
         password: user.password,
-        displayName: user.firstName + user.lastName,
+        displayName: `${user.firstName} ${user.lastName}`,
+      })
+
+      await auth.setCustomUserClaims(uid, {
+        role: user.roles ?? Roles.USER,
       })
 
       const now = time().toDate()
-      const uid = userRecord.uid
-      const docRef = this.collection.doc(uid)
-
-      await docRef.set({
+      const doc = this.collection.doc(uid)
+      await doc.set({
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -40,12 +42,13 @@ export class UserService extends BaseService<User> {
         updatedAt: now,
       })
 
-      const doc = await docRef.get()
-      return { id: doc.id, ...(doc.data() as User) }
-    } catch (error) {
-      throw new Error(error)
+      const snap = await doc.get()
+      return { id: snap.id, ...(snap.data() as User) }
+    } catch (e) {
+      throw new Error((e as Error).message)
     }
   }
+
   async findUser(email: string) {
     try {
       const user = await admin.auth().getUserByEmail(email)

@@ -1,0 +1,108 @@
+.featured-movie {
+    &__background {
+        width: 100%;
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        padding: 40px 30px;
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6); // Darkness level
+            backdrop-filter: blur(4px); // Optional blur
+            z-index: 0;
+        }
+
+        .featured-movie__overlay {
+            position: relative; // to appear above the overlay
+            z-index: 1;
+        }
+    }
+
+    &__overlay {
+        display: flex;
+        gap: 5rem;
+        padding: 2rem;
+        border-radius: 20px;
+    }
+
+    &__poster {
+        position: relative;
+        z-index: 2;
+        border-radius: 20px;
+        max-height: 600px;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 600px;
+
+        &-title {
+            margin: 10px 0;
+            font-size: 56px;
+            color: white;
+            font-weight: 600;
+        }
+
+        &-meta {
+            margin: 0.5rem 0;
+            font-size: 22px;
+            display: flex;
+            gap: 2.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        &-genres {
+            display: flex;
+            color: white;
+            font-size: 22px;
+            margin: 1rem 0 120px;
+            gap: 1.5rem;
+        }
+
+        &-description {
+            font-size: 22px;
+            margin-bottom: 2rem;
+            color: white;
+            font-weight: 400;
+            line-height: 35px;
+            letter-spacing: 1px;
+        }
+
+        &-buttons {
+            margin-top: 3rem;
+            display: flex;
+            gap: 2rem;
+
+            &--more {
+                width: 232px;
+                background: #444;
+                border: none;
+                color: white;
+                padding: 12px 40px;
+                border-radius: 30px;
+                font-size: 19px;
+                white-space: nowrap;
+            }
+
+            &--buy {
+                width: 232px;
+
+                background: #d72626;
+                border: none;
+                color: white;
+                padding: 12px 40px;
+                border-radius: 30px;
+                font-size: 19px;
+                white-space: nowrap;
+            }
+        }
+    }
+}

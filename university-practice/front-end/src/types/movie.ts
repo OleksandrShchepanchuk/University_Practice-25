@@ -3,7 +3,7 @@ export interface Movie {
     title: string;
     poster: string;
     description: string;
-    genre: string;
+    genre: string[];
     rating: number;
     year: number;
     trailer: string;
@@ -16,6 +16,9 @@ export interface MovieWithSession extends Movie {
     price: number;
     schedule: Array<{
         date: string;
-        times: string[];
+        times: Array<{
+            time: string;
+            sessionId: string;
+        }>;
     }>;
 }

@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsNumber, IsString, IsUrl, Length, Max, Min } from 'class-validator'
+import { ArrayNotEmpty, IsArray, IsNumber, IsOptional, IsString, IsUrl, Length, Max, Min } from 'class-validator'
 
 export class CreateMovieDto {
   @IsString()
@@ -11,8 +11,10 @@ export class CreateMovieDto {
   @IsString()
   description: string
 
-  @IsString()
-  genre: string
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  genre: string[]
 
   @IsNumber()
   @Min(0)
@@ -32,7 +34,7 @@ export class CreateMovieDto {
   cast: string[]
 
   @IsArray()
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsString({ each: true })
   photos: string[]
 

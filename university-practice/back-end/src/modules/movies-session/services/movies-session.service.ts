@@ -26,11 +26,12 @@ export class MoviesSessionService extends BaseService<MoviesSession> {
       const movie = movieDoc.data() as Movie
 
       const serializeSchedule = classToPlain(data.schedule)
-
       const movieSessionData = {
         movie: { id: data.movieId, ...movie },
         price: data.price,
         schedule: serializeSchedule as Schedule,
+        maxSeats: data.maxSeats ?? 30,
+        bookedSeats: data.bookedSeats ?? [],
       }
 
       const docRef = await this.collection.add(movieSessionData)
@@ -48,25 +49,25 @@ export class MoviesSessionService extends BaseService<MoviesSession> {
   async update(id: string, data: Partial<MoviesSession>): Promise<MoviesSession | null> {
     try {
       const now = time().toDate()
-      const updatePayload: Record<string, any> = {
-        updatedAt: now,
-      }
+      const updatePayload: Record<string, any> = { updatedAt: now }
 
       for (const [key, value] of Object.entries(data)) {
+        if (value === undefined) continue
+
         if (key === 'movie' && typeof value === 'object' && value !== null) {
-          const flattened = this.flattenObject(value, 'movie')
-          Object.assign(updatePayload, flattened)
+          Object.assign(updatePayload, this.flattenObject(value, 'movie'))
+        } else if (key === 'schedule' && typeof value === 'object' && value !== null) {
+          updatePayload.schedule = JSON.parse(JSON.stringify(value))
         } else {
           updatePayload[key] = value
         }
       }
 
       await this.collection.doc(id).update(updatePayload)
-
       return this.findById(id)
     } catch (error) {
       console.error(`Error updating document with id ${id}:`, error)
-      throw new Error(error)
+      throw error
     }
   }
 

@@ -1,17 +1,20 @@
 // src/App.tsx
-import LoginPage from './pages/LoginPage/LoginPage';
 import MoviePage from './pages/MoviePage/MoviePage';
 import Header from './components/layout/Header/Header.js';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import AuthProvider from './components/common/AuthProvider';
-import SessionPage from './testPages/SessionPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './store';
 import { useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
+import LoginPage from './pages/LoginPage/LoginPage';
+import Main from './pages/Main/Main';
+import SessionsPage from './pages/Sessions/Sessions';
 import { loadFavourites } from './store/slices/favouriteSlice';
-import SessionEditor from './pages/AdminPanel/AdminSessionsPage.js';
 
+import BookingPage from './pages/BookingPage/BookingPage.js';
+import AdminPage from './pages/AdminPage/AdminPage.js';
+import BookingHistoryPage from './pages/BookingHistoryPage/BookingHistoryPage.js';
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated } = useAuth();
@@ -22,27 +25,31 @@ const App = () => {
             dispatch(loadFavourites());
         }
     }, [dispatch, isAuthenticated, hasLoaded, loading, error]);
-
     return (
         <AuthProvider>
-            {/*<Header></Header>*/}
-            <div>
-                {/* <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
-                    <Link to="/" style={{ marginRight: 10 }}>
-                        Login
-                    </Link>
-                    <Link to="/s">Sessions</Link>
-                </nav> */}
+            <Header />
 
-                <Routes>
-                    <Route path="/" element={<LoginPage />} />
-                    <Route path="/s" element={<SessionPage />} />
-                    <Route path="/movies/:id" element={<MoviePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/admin/sessions/:id" element={<SessionEditor />} />
-                    {/* <Route path='/header' element={<Header />} />  */}
-                </Routes>
-            </div>
+            <Routes>
+                {isAuthenticated ? (
+                    <>
+                        <Route path="/" element={<Main />} />
+                        <Route path="/sessions" element={<SessionsPage />} />
+                        <Route path="/movies/:id" element={<MoviePage />} />
+                        <Route path="/tickets/:movieId" element={<BookingPage />} />
+                        <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+
+                        {/* fallback */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </>
+                ) : (
+                    <>
+                        <Route path="/login" element={<LoginPage />} />
+                        {/* redirect everything else to /login */}
+                        <Route path="*" element={<Navigate to="/login" replace />} />
+                    </>
+                )}
+            </Routes>
         </AuthProvider>
     );
 };

@@ -1,0 +1,141 @@
+.session-management {
+    padding: 20px;
+
+    .add-button {
+        background: #C81313;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+
+        &:hover {
+            background: #a61010;
+        }
+    }
+
+    .session-form {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+
+            &:focus {
+                outline: none;
+                border-color: #C81313;
+            }
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+
+                &[type="submit"] {
+                    background: #C81313;
+                    color: white;
+                    
+                    &:hover {
+                        background: #a61010;
+                    }
+                }
+
+                &[type="button"] {
+                    background: #666;
+                    color: white;
+                    
+                    &:hover {
+                        background: #555;
+                    }
+                }
+            }
+        }
+    }
+
+    .sessions-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+
+        .session-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+            .session-info {
+                h3 {
+                    margin: 0 0 10px 0;
+                    color: #333;
+                }
+
+                p {
+                    margin: 5px 0;
+                    color: #666;
+                }
+            }
+
+            .session-actions {
+                margin-top: 15px;
+                display: flex;
+                gap: 10px;
+
+                button {
+                    flex: 1;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    
+                    &.edit-button {
+                        background: #444;
+                        color: white;
+                        
+                        &:hover {
+                            background: #333;
+                        }
+                    }
+                    
+                    &.delete-button {
+                        background: #ff4444;
+                        color: white;
+                        
+                        &:hover {
+                            background: #cc3333;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .loading, .error, .no-sessions {
+        text-align: center;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .error {
+        color: #dc2626;
+        background: #fee2e2;
+    }
+}
