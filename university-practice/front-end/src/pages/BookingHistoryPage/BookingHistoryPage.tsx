@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getBookings } from '../../api/booking';
-import { getSessionById } from '../../api/sessions';
 import { Booking } from '../../types/booking';
 import { MoviesSession } from '../../types/movies-session';
 import './BookingHistoryPage.scss';
@@ -22,19 +21,14 @@ const BookingHistoryPage: React.FC = () => {
             try {
                 setLoading(true);
                 const bookingsData = await getBookings();
-                
-                // Fetch session details for each booking
-                const bookingsWithSessions = await Promise.all(
-                    bookingsData.map(async (booking) => {
-                        try {
-                            const session = await getSessionById(booking.sessionId);
-                            return { ...booking, session };
-                        } catch (err) {
-                            console.error(`Error fetching session for booking:`, err);
-                            return booking;
-                        }
-                    })
-                );
+                const bookingsWithSessions = bookingsData.map((booking: BookingWithSession) => {
+                    try {
+                        const session = booking.session;
+                        return { ...booking, session };
+                    } catch (err) {
+                        return booking;
+                    }
+                });
 
                 setBookings(bookingsWithSessions.reverse());
             } catch (err) {
@@ -57,17 +51,17 @@ const BookingHistoryPage: React.FC = () => {
             {bookings.length === 0 ? (
                 <div className="booking-history__empty">
                     <p>У вас ще немає бронювань</p>
-                    <button onClick={()=>navigate('/sessions')}>Купити квитки</button>
-                </div>            
+                    <button onClick={() => navigate('/sessions')}>Купити квитки</button>
+                </div>
             ) : (
                 <div className="booking-history__list">
                     {bookings.map((booking) => (
-                        <div key={booking.sessionId} className="booking-card">
+                        <div key={booking.session?.id} className="booking-card">
                             {booking.session ? (
                                 <div className="booking-card__content">
-                                    <img 
-                                        src={booking.session.movie.poster} 
-                                        alt={booking.session.movie.title} 
+                                    <img
+                                        src={booking.session.movie.poster}
+                                        alt={booking.session.movie.title}
                                         className="booking-card__poster"
                                     />
                                     <div className="booking-card__info">
@@ -79,9 +73,7 @@ const BookingHistoryPage: React.FC = () => {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="booking-card__error">
-                                    Інформація про сеанс недоступна
-                                </div>
+                                <div className="booking-card__error">Інформація про сеанс недоступна</div>
                             )}
                         </div>
                     ))}
