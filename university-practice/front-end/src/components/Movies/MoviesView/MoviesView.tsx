@@ -43,15 +43,12 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
         }
     };
 
-    const allGenres = Array.from(
-        new Set(movies.flatMap(movie => movie.genre || []))
-    ).sort();
+    const allGenres = Array.from(new Set(movies.flatMap((movie) => movie.genre || []))).sort();
 
-    const allYears = Array.from(
-        new Set(movies.map(movie => movie.year.toString()))
-    ).sort((a, b) => parseInt(b) - parseInt(a));
+    const allYears = Array.from(new Set(movies.map((movie) => movie.year.toString()))).sort(
+        (a, b) => parseInt(b) - parseInt(a),
+    );
 
-    // Опції для рейтингу
     const ratingOptions = [
         { value: '', label: 'Будь-який рейтинг' },
         { value: '9', label: '9+ Відмінно' },
@@ -65,11 +62,15 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
 
     const filteredMovies = movies.filter((m) => {
         const matchesTitle = m.title.toLowerCase().includes(q);
-        const matchesGenre = selectedGenre ? m.genre?.includes(selectedGenre) : true;
-        const matchesYear = selectedYear ? m.year.toString() === selectedYear : true;
-        const matchesRating = selectedRating ? 
-            m.rating !== undefined && m.rating >= parseFloat(selectedRating) : true;
-        
+        const matchesGenre = variant === 'default' ? (selectedGenre ? m.genre?.includes(selectedGenre) : true) : true;
+        const matchesYear = variant === 'default' ? (selectedYear ? m.year.toString() === selectedYear : true) : true;
+        const matchesRating =
+            variant === 'default'
+                ? selectedRating
+                    ? m.rating !== undefined && m.rating >= parseFloat(selectedRating)
+                    : true
+                : true;
+
         return matchesTitle && matchesGenre && matchesYear && matchesRating;
     });
 
@@ -99,46 +100,47 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
                         className="movies-view__search-input"
                     />
                 </div>
+                {variant === 'default' && (
+                    <div className="movies-view__selectors">
+                        <select
+                            value={selectedRating}
+                            onChange={(e) => setSelectedRating(e.target.value)}
+                            className="movies-view__select"
+                        >
+                            {ratingOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
 
-                <div className="movies-view__selectors">
-                    <select
-                        value={selectedRating}
-                        onChange={(e) => setSelectedRating(e.target.value)}
-                        className="movies-view__select"
-                    >
-                        {ratingOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
+                        <select
+                            value={selectedGenre}
+                            onChange={(e) => setSelectedGenre(e.target.value)}
+                            className="movies-view__select"
+                        >
+                            <option value="">Усі жанри</option>
+                            {allGenres.map((genre) => (
+                                <option key={genre} value={genre}>
+                                    {genre}
+                                </option>
+                            ))}
+                        </select>
 
-                    <select
-                        value={selectedGenre}
-                        onChange={(e) => setSelectedGenre(e.target.value)}
-                        className="movies-view__select"
-                    >
-                        <option value="">Усі жанри</option>
-                        {allGenres.map((genre) => (
-                            <option key={genre} value={genre}>
-                                {genre}
-                            </option>
-                        ))}
-                    </select>
-
-                    <select
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(e.target.value)}
-                        className="movies-view__select"
-                    >
-                        <option value="">Усі роки</option>
-                        {allYears.map((year) => (
-                            <option key={year} value={year}>
-                                {year}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                        <select
+                            value={selectedYear}
+                            onChange={(e) => setSelectedYear(e.target.value)}
+                            className="movies-view__select"
+                        >
+                            <option value="">Усі роки</option>
+                            {allYears.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
             </div>
 
             <div className="movies-view__grid">
