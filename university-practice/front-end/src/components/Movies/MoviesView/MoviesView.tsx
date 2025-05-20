@@ -29,10 +29,13 @@ const isMovieWithSession = (movie: Movie | MovieWithSession): movie is MovieWith
 
 const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loading, error, variant = 'default' }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState<string>('');
+    const [selectedYear, setSelectedYear] = useState<string>('');
+    const [selectedRating, setSelectedRating] = useState<string>('');
 
     const { isAuthenticated } = useAuth();
     const favourites = useSelector((state: RootState) => state.favourites.list);
-    const [searchQuery, setSearchQuery] = useState('');
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -40,14 +43,35 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
         }
     };
 
+    const allGenres = Array.from(
+        new Set(movies.flatMap(movie => movie.genre || []))
+    ).sort();
+
+    const allYears = Array.from(
+        new Set(movies.map(movie => movie.year.toString()))
+    ).sort((a, b) => parseInt(b) - parseInt(a));
+
+    // Опції для рейтингу
+    const ratingOptions = [
+        { value: '', label: 'Будь-який рейтинг' },
+        { value: '9', label: '9+ Відмінно' },
+        { value: '8', label: '8+ Дуже добре' },
+        { value: '7', label: '7+ Добре' },
+        { value: '6', label: '6+ Задовільно' },
+        { value: '5', label: '5+ Посередньо' },
+    ];
+
     const q = searchQuery.trim().toLowerCase();
 
-    const filteredMovies = movies.filter(
-        (m) =>
-            m.title.toLowerCase().includes(q) ||
-            m.genre?.some((g) => g.toLowerCase().includes(q)) ||
-            m.year.toString().includes(q),
-    );
+    const filteredMovies = movies.filter((m) => {
+        const matchesTitle = m.title.toLowerCase().includes(q);
+        const matchesGenre = selectedGenre ? m.genre?.includes(selectedGenre) : true;
+        const matchesYear = selectedYear ? m.year.toString() === selectedYear : true;
+        const matchesRating = selectedRating ? 
+            m.rating !== undefined && m.rating >= parseFloat(selectedRating) : true;
+        
+        return matchesTitle && matchesGenre && matchesYear && matchesRating;
+    });
 
     const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
     const startIdx = (currentPage - 1) * MOVIES_PER_PAGE;
@@ -55,27 +79,68 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery]);
+    }, [searchQuery, selectedGenre, selectedYear, selectedRating]);
 
     return (
         <section className="movies-view">
-            {/* <h1 className="movies-view__title">{title}</h1> */}
-
             {loading && <Loader />}
             {error && <p className="movies-view__status movies-view__status--error">Error: {error}</p>}
             {!loading && !error && currentMovies.length === 0 && (
                 <p className="movies-view__status">Немає доступних фільмів.</p>
             )}
 
-            <div className="movies-view__search">
-                <input
-                    type="text"
-                    placeholder="Пошук"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="movies-view__search-input"
-                />
+            <div className="movies-view__filters">
+                <div className="movies-view__search">
+                    <input
+                        type="text"
+                        placeholder="Пошук за назвою"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="movies-view__search-input"
+                    />
+                </div>
+
+                <div className="movies-view__selectors">
+                    <select
+                        value={selectedRating}
+                        onChange={(e) => setSelectedRating(e.target.value)}
+                        className="movies-view__select"
+                    >
+                        {ratingOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        value={selectedGenre}
+                        onChange={(e) => setSelectedGenre(e.target.value)}
+                        className="movies-view__select"
+                    >
+                        <option value="">Усі жанри</option>
+                        {allGenres.map((genre) => (
+                            <option key={genre} value={genre}>
+                                {genre}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                        className="movies-view__select"
+                    >
+                        <option value="">Усі роки</option>
+                        {allYears.map((year) => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
+
             <div className="movies-view__grid">
                 {currentMovies.map((movie) => {
                     const showTimes =

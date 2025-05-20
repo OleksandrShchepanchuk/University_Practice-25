@@ -38,6 +38,7 @@ const Booking: React.FC<BookingProps> = ({ sessionId }) => {
         } finally {
             setLoading(false);
         }
+
     };
 
     if (!session) return <div>Завантаження...</div>;

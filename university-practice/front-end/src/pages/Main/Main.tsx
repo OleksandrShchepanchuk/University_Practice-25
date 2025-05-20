@@ -15,7 +15,7 @@ const Main: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated } = useAuth();
     const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
-    const featuredSet = useRef(false); // ✅ запобігає подвійному встановленню
+    const featuredSet = useRef(false);
 
     const {
         list: sessions,
