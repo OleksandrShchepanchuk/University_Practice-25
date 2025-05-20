@@ -12,7 +12,7 @@ import { ConfirmModal } from '../../components/common/ConfirmModal/ConfirmModal'
 import './BookingPage.scss';
 import Loader from '../../components/common/Loader/Loader';
 import { createBooking } from '../../api/booking';
-
+import { useNavigate } from 'react-router-dom';
 const BookingPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { movieId } = useParams<{ movieId: string }>();
@@ -29,6 +29,7 @@ const BookingPage: React.FC = () => {
     const [processing, setProcessing] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
+    const navigate = useNavigate();
     // Пагінація по датах
     const [datePageIndex, setDatePageIndex] = useState(0);
     const datesPerPage = 4;
@@ -47,6 +48,7 @@ const BookingPage: React.FC = () => {
             });
             if (!res) throw new Error('Не вдалося оформити квиток');
             console.log('Booking successful:', res);
+            navigate('/bookinghistory');
         } catch (e: any) {
             setErrorMsg(e.message || 'Помилка оформлення');
         } finally {
@@ -94,10 +96,7 @@ const BookingPage: React.FC = () => {
 
     const uniqueDates = Array.from(new Set(sessions.map((s) => s.schedule.date)));
     const totalPages = Math.ceil(uniqueDates.length / datesPerPage);
-    const paginatedDates = uniqueDates.slice(
-        datePageIndex * datesPerPage,
-        datePageIndex * datesPerPage + datesPerPage
-    );
+    const paginatedDates = uniqueDates.slice(datePageIndex * datesPerPage, datePageIndex * datesPerPage + datesPerPage);
 
     const sessionsForDate = sessions.filter((s) => s.schedule.date === selectedDate);
 
