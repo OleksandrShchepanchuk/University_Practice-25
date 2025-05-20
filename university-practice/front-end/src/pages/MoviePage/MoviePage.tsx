@@ -30,13 +30,12 @@ const MoviePage: React.FC = () => {
         error: sessionsError,
         hasLoaded: sessionLoaded,
     } = useSelector((state: RootState) => state.sessions);
-  
+
     useEffect(() => {
         if (!sessionLoaded && !sessionsLoading && isAuthenticated) {
             dispatch(loadSessions());
         }
     }, [sessionLoaded, sessionsLoading, isAuthenticated, dispatch]);
-
 
     useEffect(() => {
         if (!id) return;
@@ -49,23 +48,22 @@ const MoviePage: React.FC = () => {
 
     const rmovies = useMemo(() => {
         const now = new Date();
-    
+
         const futureSessions = sessions.filter((session: MoviesSession) => {
             const { date, times } = session.schedule;
             const sessionDate = new Date(`${date}T${times}`);
             return sessionDate > now;
         });
-    
-        // Унікальні фільми
+
         const uniqueMoviesMap = new Map<string, Movie>();
         for (const session of futureSessions) {
             uniqueMoviesMap.set(session.movie.id, session.movie);
         }
-    
+
         return Array.from(uniqueMoviesMap.values());
     }, [sessions]);
 
-    const showButton = rmovies.some((m:Movie)=> m.id === id);
+    const showButton = rmovies.some((m: Movie) => m.id === id);
 
     if (loading) return <Loader />;
     if (error || !movie) return <div>{error || 'Movie not found'}</div>;
@@ -78,11 +76,13 @@ const MoviePage: React.FC = () => {
                 <div className="movie-page-full__content">
                     <div className="movie-page-full__maininfo">
                         <MoviePosterDet movie={movie} />
-                        {
-                            showButton ? (<button onClick={() => navigate(`/tickets/${id}`)} className="movie-page-full__buy-button">
-                            Придбати квиток
-                        </button>) : (<div className="movie-page-full__no-session">Фільму немає у прокаті</div>)
-                        }
+                        {showButton ? (
+                            <button onClick={() => navigate(`/tickets/${id}`)} className="movie-page-full__buy-button">
+                                Придбати квиток
+                            </button>
+                        ) : (
+                            <div className="movie-page-full__no-session">Фільму немає у прокаті</div>
+                        )}
                     </div>
                     <div className="movie-page-full__extra">
                         <Carousel images={movie.photos?.length ? movie.photos : [movie.poster]} />
