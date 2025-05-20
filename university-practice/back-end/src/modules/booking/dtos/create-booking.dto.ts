@@ -1,15 +1,15 @@
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsPositive, IsString, ArrayNotEmpty, IsInt } from 'class-validator'
 
 export class CreateBookingDto {
   @IsString()
   @IsNotEmpty()
   sessionId: string
 
-  @IsInt()
-  @IsPositive()
-  seats: number
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsInt({ each: true })
+  seats: number[]
 
-  @IsInt()
   @IsPositive()
   totalPrice: number
 }

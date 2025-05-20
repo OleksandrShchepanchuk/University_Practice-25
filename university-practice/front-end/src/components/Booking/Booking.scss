@@ -1,0 +1,49 @@
+.booking {
+    padding: 2rem;
+    color: white;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+
+    &__title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    &__info {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    &__price {
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    &__total {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+    }
+
+    &__button {
+        margin-top: 2rem;
+        background-color: #d72626;
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #b21e1e;
+        }
+    }
+}

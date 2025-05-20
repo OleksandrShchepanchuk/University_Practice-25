@@ -1,258 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Maitree:wght@200;300;400&display=swap&subset=latin,cyrillic');
-
-// Variables
-$min-height: 100vh;
-$text-white: #ffffff;
-$font-maitree: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
-$font-bakbak: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
-$overlay-color: rgba(0, 0, 0, 0.7);
-$font-weight-maitree: 300;
-$color-red: #C81313;
-$color-white: white; // Note: $text-white and $color-white are both #ffffff
-$color-red-hover: #af1313;
-
-// Screen breakpoints
-$screen-sm: 768px;
-$screen-md: 1024px;
-$screen-lg: 1440px;
-$screen-xl: 1920px;
-
-// Base font sizes (can be used as reference or for calculations)
-$base-font-size: 1rem;
-$title-font-size-ref: 2.1rem; // Original reference, not directly used below unless needed
-$genre-font-size-ref: 0.865rem; // Original reference
-
-// Reset
-body {
-  margin: 0;
-  padding: 0;
-  font-family: $font-maitree;
-}
-
-// Movie Page Layout
-.movie-page {
-  position: relative;
-  min-height: $min-height;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: var(--movie-bg); // Assumes --movie-bg is defined elsewhere (e.g., inline style or JS)
+.movie-page-full {
+    height: 100vh; // force full height
+    display: flex;
+    flex-direction: column;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-    opacity: 1; // Ensure this doesn't conflict with overlay intent if image is too bright
-    z-index: -2;
-  }
+    background-repeat: no-repeat;
+    position: relative;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $overlay-color;
-    z-index: -1;
-  }
-}
-
-.movie-content {
-  position: relative;
-  display: flex;
-  flex-direction: column; // Mobile: Stack main info and extra info vertically
-  padding: 0; // Mobile: No padding on the container, children will handle it
-}
-
-.movie-maininfo {
-  width: 100%; // Mobile: Takes full width
-  padding: 0;
-  margin: 0;
-  min-height: auto; // Mobile: Height based on content
-
-  .poster {
-    width: 100%;
-    height: 65vh; // Mobile: Poster takes significant viewport height
-    object-fit: cover;
-    border-radius: 0; // Mobile: No border radius for full-width poster
-    margin: 0;
-    display: block; // Ensure no extra space below image
-  }
-}
-
-.movie-extra {
-  width: 100%; // Mobile: Takes full width
-  margin: 0;
-  padding: 24px 16px; // Mobile: Padding for inner content
-  min-height: auto;
-  box-sizing: border-box;
-}
-
-// Movie Details (Description, Cast) - Children of .movie-extra
-.movie-description {
-  margin-top: 0; // Mobile: Top margin handled by parent's padding or first element
-  color: $text-white;
-  font-family: $font-maitree;
-  font-weight: $font-weight-maitree;
-  font-size: $base-font-size; // Mobile: 1rem
-  line-height: 1.6;
-  margin-right: 0; // Mobile: Parent .movie-extra handles side padding
-}
-
-.movie-cast {
-  margin-top: 20px; // Mobile: Space between description and cast
-  color: $text-white;
-  font-family: $font-maitree;
-  font-weight: $font-weight-maitree;
-  font-size: $base-font-size; // Mobile: 1rem
-  margin-right: 0; // Mobile: Parent .movie-extra handles side padding
-}
-
-.buy-button {
-  font-family: $font-maitree;
-  display: block; // Makes it easier to manage width and margin
-  width: 64%; // Mobile: As specified
-  background-color: $color-red;
-  color: $color-white;
-  padding: 9px 16px;
-  border: none;
-  border-radius: 16px;
-  cursor: pointer;
-  font-size: $genre-font-size-ref; // Mobile: 0.865rem
-  margin: 24px auto 0; // Mobile: margin-top and centered
-  position: relative;
-  font-weight: 600;
-  text-align: center;
-
-  &:hover {
-    background-color: $color-red-hover;
-  }
-}
-
-// --- Tablet Styles ---
-@media (min-width: $screen-sm) {
-  // Add any $screen-sm specific styles if needed.
-  // For now, it will inherit mobile styles or jump to $screen-md if no sm-specifics.
-  .movie-extra {
-    padding: 30px 24px;
-  }
-
-  .buy-button {
-    width: 50%;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-}
-
-
-// --- Medium Desktop Styles ---
-@media (min-width: $screen-md) {
-  .movie-content {
-    flex-direction: row; // Desktop: Side-by-side layout
-    padding: 0 2vw; // Desktop: Padding on the container sides
-    align-items: flex-start; // Align items to the top
-    width: 100vw;
-  }
-
-  .movie-maininfo {
-    width: 35%; // Desktop: Takes up 35% of the width
-    // padding-top: 4%; // If needed to align with .movie-extra's margin-top
-    .poster {
-      width: 78%; // Desktop: Poster width relative to its container
-      height: auto; // Desktop: Height adjusts to aspect ratio
-      border-radius: 15px; // Desktop: Rounded corners
-      margin-top: 4%; // Align with movie-extra text content if movie-extra has padding
-      // If .movie-extra padding becomes 0, this can be margin-top: 4%
+    &__overlay {
+        flex: 1; // fills height of parent
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
     }
-  }
 
-  .movie-extra {
-    width: 65%; // Desktop: Takes up 65%
-    margin-left: 30px; // Desktop: Space between maininfo and extra. (Was 50px, adjusted for potential padding interplay)
-    margin-top: 4%; // Desktop: Top margin
-    min-height: $min-height; // Desktop: Full height
-    padding: 16px 0 16px 16px; // Desktop: Reset mobile padding, add some left padding if needed
-  }
+    &__content {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        color: white;
 
-  .movie-description {
-    margin-top: 8%;
-    font-size: 0.9rem; // MD specific font size
-    margin-right: 1%; // As per original for desktop
-  }
-
-  .movie-cast {
-    margin-top: 4%;
-    font-size: 0.9rem; // MD specific font size
-    margin-right: 1%; // As per original for desktop
-  }
-
-  .buy-button {
-    width:65%; // Let padding and content define width
-    display: inline-block; // More conventional for buttons in text flow
-    margin: 6% 0 0 0; // Reset mobile auto margins, apply top margin
-    font-size: 1rem;
-    padding: 9px 22px;
-  }
-}
-
-// --- Large Desktop Styles ---
-@media (min-width: $screen-lg) {
-  .movie-maininfo {
-    .poster {
-       margin-top: 1% ;
+        @media (min-width: 1024px) {
+            flex-direction: row;
+            gap: 3rem;
+        }
     }
-  }
-  .movie-extra {
-    width: 65%;
-    margin-left: 40px;
-    padding: 20px 0 20px 20px;
-  }
 
-  .movie-description {
-    
-    font-size: 1.0rem; // LG specific font size
-  }
+    &__maininfo {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-  .movie-cast {
-    margin-top: 4%;
-    font-size: 1.0rem; // LG specific font size
-  }
-
-  .buy-button {
-    font-size: 1.05rem;
-    padding: 10px 25px;
-  }
-}
-
-// --- Extra Large Desktop Styles ---
-@media (min-width: $screen-xl) {
-   .movie-maininfo {
-    .poster {
-       margin-top: 1%; // A bit more margin if text in movie-extra gets larger
+        .poster {
+            width: 90%;
+            border-radius: 12px;
+        }
     }
-  }
-  .movie-extra {
-    padding: 24px 0 24px 24px;
-  }
-  .movie-description {
-    font-size: 1.1rem; // XL specific font size
-  }
 
-  .movie-cast {
-    font-size: 1.1rem; // XL specific font size
-    margin-top: 4%; // XL specific margin
-  }
+    &__buy-button {
+        background-color: #c81313;
+        color: white;
+        padding: 10px 22px;
+        border: none;
+        border-radius: 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s ease;
 
-  .buy-button {
-    width: 60%; // Was 62%, auto is more flexible with padding
-    font-size: 1.1rem; // Corrected from duplicate declaration
-    padding: 10px 28px;
-    border-radius: 20px;
-    margin-top: 4%;
-  }
-  
+        &:hover {
+            background-color: #af1313;
+        }
+    }
+
+    &__extra {
+        flex: 2;
+        margin-top: 3rem;
+
+        @media (min-width: 1024px) {
+            margin-top: 3rem;
+        }
+    }
+
+    &__description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-top: 1.2rem;
+    }
+
+    &__cast {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        color: #ccc;
+    }
+
+    &__no-session {
+        margin-top: 5%;
+        align-self: flex-start;
+        font-family: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #b2aeaebc;
+    }
 }

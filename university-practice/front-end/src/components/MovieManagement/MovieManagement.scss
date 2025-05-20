@@ -1,0 +1,183 @@
+.movie-management {
+    padding: 2rem;
+
+    /* ——— “Додати новий фільм” button ——— */
+    .add-button {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #fff;
+        background: transparent;
+        color: #fff;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+        &:hover {
+            background: #c81313;
+            border-color: #c81313;
+            color: #fff;
+        }
+    }
+
+    /* ——— The form container ——— */
+    .movie-form {
+        background: #171616;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+
+        input,
+        textarea {
+            width: 100%;
+            background: #2f2f2f;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+
+            &:focus {
+                outline: none;
+                border-color: #c81313;
+            }
+        }
+
+        textarea {
+            min-height: 8rem;
+            resize: vertical;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+
+            button {
+                flex: 1;
+                padding: 0.75rem;
+                font-size: 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                border: none;
+                color: #fff;
+                transition: background 0.2s;
+
+                &[type='submit'] {
+                    background: #c81313;
+                }
+                &[type='submit']:hover {
+                    background: #a61010;
+                }
+
+                &[type='button'] {
+                    background: #444;
+                }
+                &[type='button']:hover {
+                    background: #555;
+                }
+            }
+        }
+    }
+
+    /* ——— Restore the movie list grid ——— */
+    .movies-list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .movie-item {
+        background: #2f2f2f;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .movie-info {
+            padding: 1rem;
+
+            h3 {
+                margin: 0 0 0.25rem;
+                color: #fff;
+            }
+
+            p {
+                margin: 0.25rem 0 0;
+                color: #ccc;
+                font-size: 0.9rem;
+            }
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+
+            button {
+                flex: 1;
+                padding: 0.5rem 0;
+                font-size: 0.9rem;
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            .edit-button {
+                background: #444;
+                color: #fff;
+            }
+            .edit-button:hover {
+                background: #333;
+            }
+
+            .delete-button {
+                background: #c81313;
+                color: #fff;
+            }
+            .delete-button:hover {
+                background: #a61010;
+            }
+        }
+    }
+
+    /* ——— Pagination (unchanged) ——— */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+
+        button {
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover:not(:disabled) {
+                background: #666;
+            }
+            &.active {
+                background: #c81313;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: default;
+            }
+        }
+    }
+}

@@ -3,6 +3,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { auth } from '../../firebaseConfig';
 import { setUser, clearUser } from '../../store/slices/usersSlice';
+import Loader from './Loader/Loader';
+import firebase from 'firebase/compat/app';
 
 type Props = {
     children: React.ReactNode;
@@ -11,15 +13,17 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
     const [authChecked, setAuthChecked] = useState(false);
     const dispatch = useDispatch();
-
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
+                const { claims } = (await firebaseUser?.getIdTokenResult()) as any;
+                const { roles } = claims;
                 dispatch(
                     setUser({
                         uid: firebaseUser.uid,
                         email: firebaseUser.email,
                         displayName: firebaseUser.displayName,
+                        roles: roles || 'USER',
                     }),
                 );
             } else {
@@ -32,7 +36,7 @@ const AuthProvider = ({ children }: Props) => {
     }, [dispatch]);
 
     if (!authChecked) {
-        return <div>Loading...</div>; // You can use a Spinner or Skeleton here
+        return <Loader />;
     }
 
     return <>{children}</>;

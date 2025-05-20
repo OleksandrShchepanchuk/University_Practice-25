@@ -92,7 +92,7 @@ $screen-xl: 1920px;
 @media (min-width: $screen-md) {
   .carousel {
     width: 85%; // Desktop: Revert to 85% width
-    margin: 0 auto; // Desktop: Center the carousel
+    margin: 20px auto; // Desktop: Center the carousel
     border-radius: 16px; // Apply border-radius to the carousel container itself for a contained look
 
     // The explicit `height` percentages from the original (e.g., height: 53%)

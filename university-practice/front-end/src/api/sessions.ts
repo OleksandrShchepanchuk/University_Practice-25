@@ -1,7 +1,7 @@
 // api/sessions.ts
 
 import axiosInstance from './axiosInstance';
-import { MoviesSession } from '../types/movies-session'; // Вказуємо шлях до типу
+import { MoviesSession, toCreateMoviesSessionDto, toUpdateMoviesSessionDto } from '../types/movies-session';
 
 export const getSessions = async (): Promise<MoviesSession[]> => {
     const response = await axiosInstance.get('/api/movies-session');
@@ -14,12 +14,14 @@ export const getSessionById = async (id: string): Promise<MoviesSession> => {
 };
 
 export const createSession = async (session: MoviesSession): Promise<MoviesSession> => {
-    const response = await axiosInstance.post('/api/movies-session', session);
+    const dto = toCreateMoviesSessionDto(session);
+    const response = await axiosInstance.post('/api/movies-session', dto);
     return response.data;
 };
 
 export const updateSession = async (id: string, session: Partial<MoviesSession>): Promise<MoviesSession> => {
-    const response = await axiosInstance.patch(`/api/movies-session/${id}`, session);
+    const dto = toUpdateMoviesSessionDto(session);
+    const response = await axiosInstance.patch(`/api/movies-session/${id}`, dto);
     return response.data;
 };
 

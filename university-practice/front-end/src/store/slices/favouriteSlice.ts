@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFavourites, addFavourite, removeFavourite } from '../../api/favourites';
 import type { Movie } from '../../types/movie';
-import type { RootState } from '../../store'; // якщо є
+import type { RootState } from '../../store';
 
 interface FavouriteState {
     list: Movie[];
@@ -32,15 +32,14 @@ export const toggleFavourite = createAsyncThunk<
     { state: RootState }
 >('favourites/toggle', async (movie, { getState, rejectWithValue }) => {
     const { list } = getState().favourites;
-
-    const exists = list.some((f: Movie) => f.id === movie.id);
+    const exists = list.some((f) => f.id === movie.id);
 
     try {
         if (exists) {
-            await removeFavourite({ movie: movie });
+            await removeFavourite({ movie });
             return { movieId: movie.id, action: 'remove' };
         } else {
-            await addFavourite({ movie: movie });
+            await addFavourite({ movie });
             return { movieId: movie.id, action: 'add', movie };
         }
     } catch (error: any) {
@@ -67,31 +66,20 @@ const favouriteSlice = createSlice({
                 state.loading = false;
                 state.error = (action.payload as string) || 'Failed to load favourites';
             })
-            .addCase(toggleFavourite.pending, (state, action) => {
-                const movie = action.meta.arg;
-
-                const exists = state.list.some((f) => f.id === movie.id);
-
-                if (exists) {
-                    state.list = state.list.filter((f) => f.id !== movie.id);
-                } else {
-                    state.list.push(movie);
-                }
-            })
             .addCase(toggleFavourite.fulfilled, (state, action) => {
-                // Опціонально: можна нічого не робити тут
+                const { movieId, action: favAction, movie } = action.payload;
+
+                if (favAction === 'add' && movie) {
+                    // Avoid duplicates
+                    const exists = state.list.some((m) => m.id === movie.id);
+                    if (!exists) state.list.push(movie);
+                }
+
+                if (favAction === 'remove') {
+                    state.list = state.list.filter((f) => f.id !== movieId);
+                }
             })
             .addCase(toggleFavourite.rejected, (state, action) => {
-                const movie = action.meta.arg;
-
-                const wasTryingToAdd = !state.list.some((f) => f.id === movie.id);
-
-                if (wasTryingToAdd) {
-                    state.list = state.list.filter((f) => f.id !== movie.id);
-                } else {
-                    state.list.push(movie);
-                }
-
                 state.error = (action.payload as string) || 'Failed to toggle favourite';
             });
     },

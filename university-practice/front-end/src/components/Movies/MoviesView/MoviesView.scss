@@ -17,6 +17,8 @@
         font-size: 1rem;
         color: var(--text-color);
         margin-bottom: 1rem;
+        font-family: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #ffffffcc;
 
         &--error {
             color: red;
@@ -49,9 +51,9 @@
             transition: all 0.2s ease;
 
             &.active {
-                background: #007aff;
+                background: #d72626;
                 color: white;
-                border-color: #007aff;
+                border-color: #d72626;
             }
 
             &:hover:not(:disabled):not(.active) {
@@ -64,4 +66,35 @@
             }
         }
     }
+    &__search {
+        margin-bottom: 2rem;
+        margin-left: 0;
+        width: 300px; // Adjust width as needed
+        align-self: flex-start;
+    }
+
+    &__search-input {
+        width: 100%;
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        background: transparent;
+        color: #fff;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:focus {
+            outline: none;
+            border-bottom-color: #fff;
+        }
+    }
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+  }

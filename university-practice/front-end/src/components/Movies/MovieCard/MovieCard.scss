@@ -1,5 +1,6 @@
 .movies-view {
     .movie-card {
+
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -14,7 +15,6 @@
             position: relative;
             width: 100%;
             padding-top: 150%; // 2:3 aspect ratio
-            background-color: var(--image-bg, #f0f0f0);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 
             img {
@@ -37,6 +37,8 @@
             gap: 8px;
 
             .movie-card__title {
+                font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
+                text-decoration: none;
                 font-size: 1rem;
                 font-weight: 600;
                 color: var(--text-color, #333);
@@ -78,7 +80,9 @@
                 gap: 6px;
                 margin-top: 8px;
                 width: 100%;
-
+                a {
+                    text-decoration: none;
+                }
                 span {
                     font-size: 0.85rem;
                     color: var(--text-color, #fff);
@@ -88,6 +92,10 @@
                     font-weight: 600;
 
                     &:visited {
+                        color: var(--text-color, #fff);
+                    }
+                    &:hover {
+                        background: var(--showtime-hover, #d72626);
                         color: var(--text-color, #fff);
                     }
                 }
