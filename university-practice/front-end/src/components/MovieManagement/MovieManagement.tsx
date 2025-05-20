@@ -33,7 +33,7 @@ const blankForm: MovieFormData = {
     photos: '',
 };
 
-const PER_PAGE = 6;
+const PER_PAGE = 4;
 
 const MovieManagement = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -127,7 +127,6 @@ const MovieManagement = () => {
             <button className="add-button" onClick={() => setIsFormVisible(true)}>
                 Додати новий фільм
             </button>
-
             {isFormVisible && (
                 <form className="movie-form" onSubmit={submit}>
                     <input name="title" value={form.title} onChange={handleInput} placeholder="Назва фільму" required />
@@ -211,7 +210,6 @@ const MovieManagement = () => {
                             ))
                         )}
                     </div>
-
                     {pageCount > 1 && (
                         <div className="pagination">
                             <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>

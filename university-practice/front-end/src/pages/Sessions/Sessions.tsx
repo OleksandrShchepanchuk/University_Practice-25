@@ -93,7 +93,7 @@ const Sessions = () => {
         <div className={styles.main}>
             <div className={styles.background}></div>
             <div className={styles.page}>
-                {loading && <Loader />}
+                {/* {loading && <Loader />} */}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className={styles.controls}>
@@ -176,7 +176,7 @@ const Sessions = () => {
                             }))
                             .filter((movie) => movie.schedule.length > 0)}
                     />
-                ) : (
+                ) : loading ? (<Loader/>) : (
                     <div className={styles.empty}>Сеансів не знайдено</div>
                 )}
             </div>

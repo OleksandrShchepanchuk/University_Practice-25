@@ -39,7 +39,11 @@ const FeaturedMovie: React.FC<FeaturedMovieProps> = ({ movie }) => {
                             className="featured-movie__details-buttons--more">
                             Дізнатися більше
                         </button>
-                        <button className="featured-movie__details-buttons--buy">Придбати квиток</button>
+                        <button
+                            onClick={() => navigate(`tickets/${id}`)} 
+                            className="featured-movie__details-buttons--buy">
+                            Придбати квиток
+                        </button>
                     </div>
                 </div>
             </div>

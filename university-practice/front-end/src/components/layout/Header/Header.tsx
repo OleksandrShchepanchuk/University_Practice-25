@@ -25,7 +25,7 @@ const Header: React.FC = () => {
                 <nav className="nav">
                     <a href="/">Головна</a>
                     <a href="/sessions">Розклад сеансів</a>
-                    <a href="#">Обрані</a>
+                    <a href="/favourites">Обрані</a>
                     {user?.roles === 'ADMIN' && <a href="/admin">Панель адміністратора</a>}
                 </nav>
                 <div className="user-menu" ref={dropdownRef}>

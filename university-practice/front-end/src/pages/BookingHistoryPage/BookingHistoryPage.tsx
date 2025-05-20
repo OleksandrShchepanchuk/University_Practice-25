@@ -5,6 +5,7 @@ import { Booking } from '../../types/booking';
 import { MoviesSession } from '../../types/movies-session';
 import './BookingHistoryPage.scss';
 import Loader from '../../components/common/Loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 interface BookingWithSession extends Booking {
     session?: MoviesSession;
@@ -14,6 +15,7 @@ const BookingHistoryPage: React.FC = () => {
     const [bookings, setBookings] = useState<BookingWithSession[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBookingsWithSessions = async () => {
@@ -34,7 +36,7 @@ const BookingHistoryPage: React.FC = () => {
                     })
                 );
 
-                setBookings(bookingsWithSessions);
+                setBookings(bookingsWithSessions.reverse());
             } catch (err) {
                 setError('Не вдалося завантажити історію бронювань');
                 console.error('Error fetching bookings:', err);
@@ -54,8 +56,9 @@ const BookingHistoryPage: React.FC = () => {
             <h1>Історія бронювань</h1>
             {bookings.length === 0 ? (
                 <div className="booking-history__empty">
-                    У вас ще немає бронювань
-                </div>
+                    <p>У вас ще немає бронювань</p>
+                    <button onClick={()=>navigate('/sessions')}>Купити квитки</button>
+                </div>            
             ) : (
                 <div className="booking-history__list">
                     {bookings.map((booking) => (

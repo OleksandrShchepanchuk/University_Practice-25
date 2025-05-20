@@ -17,6 +17,8 @@
         font-size: 1rem;
         color: var(--text-color);
         margin-bottom: 1rem;
+        font-family: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #ffffffcc;
 
         &--error {
             color: red;
@@ -49,9 +51,9 @@
             transition: all 0.2s ease;
 
             &.active {
-                background: #007aff;
+                background: #d72626;
                 color: white;
-                border-color: #007aff;
+                border-color: #d72626;
             }
 
             &:hover:not(:disabled):not(.active) {
@@ -91,3 +93,8 @@
         }
     }
 }
+
+a {
+    text-decoration: none;
+    color: inherit;
+  }

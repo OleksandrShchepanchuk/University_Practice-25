@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import MoviePosterDet from '../../components/layout/MoviePosterDet/MoviePosterDet';
 import Carousel from '../../components/layout/Carousel/Carousel';
 import { Movie } from '../../types/movie';
-import './MoviePage.scss';
 import { getMovieById } from '../../api/movies';
 import Loader from '../../components/common/Loader/Loader';
+import { loadSessions } from '../../store/slices/sessionsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-// const movie: Movie = {
-//     title: "The Batman",
-//     year: 2022,
-//     rating: 7.8,
-//     duration: 60,
-//     genre: "Драма Бойовик",
-//     description: "Коли садистський серійний вбивця починає вбивати ключових політичних фігур у Ґотемі,Коли садистський серійний вбивця починає вбивати ключових політичних фігур у ҐотеміКоли садистський серійний вбивця починає вбивати ключових політичних фігур у Ґотемі",
-//     cast: ["Роберт Паттінсон", "Зої Кравіц", "Пол Дано"],
-//     poster: '../../public/images/batman.jpg',
-//     photos: ['../../public/images/batman.jpg', '../../public/images/mbu.jpg'],
-//     trailer: 'https://www.youtube.com/watch?v=Hh3g1j0v2xA',
-// };
+import type { RootState } from '../../store';
+import { AppDispatch } from '../../store';
+import './MoviePage.scss';
+import { useAuth } from '../../hooks/useAuth';
+import { MoviesSession } from '../../types/movies-session';
 
 const MoviePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -27,49 +21,74 @@ const MoviePage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const { isAuthenticated } = useAuth();
+
+    const {
+        list: sessions,
+        loading: sessionsLoading,
+        error: sessionsError,
+        hasLoaded: sessionLoaded,
+    } = useSelector((state: RootState) => state.sessions);
+  
+    useEffect(() => {
+        if (!sessionLoaded && !sessionsLoading && isAuthenticated) {
+            dispatch(loadSessions());
+        }
+    }, [sessionLoaded, sessionsLoading, isAuthenticated, dispatch]);
+
+
     useEffect(() => {
         if (!id) return;
         setLoading(true);
         getMovieById(id)
-            .then((data) => {
-                setMovie(data);
-                console.log('Movie Poster URL:', data.poster); // <-- ADD THIS
-            })
+            .then(setMovie)
             .catch(() => setError('Movie not found'))
             .finally(() => setLoading(false));
     }, [id]);
 
+    const rmovies = useMemo(() => {
+        const now = new Date();
+    
+        const futureSessions = sessions.filter((session: MoviesSession) => {
+            const { date, times } = session.schedule;
+            const sessionDate = new Date(`${date}T${times}`);
+            return sessionDate > now;
+        });
+    
+        // Унікальні фільми
+        const uniqueMoviesMap = new Map<string, Movie>();
+        for (const session of futureSessions) {
+            uniqueMoviesMap.set(session.movie.id, session.movie);
+        }
+    
+        return Array.from(uniqueMoviesMap.values());
+    }, [sessions]);
+
+    const showButton = rmovies.some((m:Movie)=> m.id === id);
+
     if (loading) return <Loader />;
     if (error || !movie) return <div>{error || 'Movie not found'}</div>;
+
+    const backgroundImage = movie.photos?.[0] || movie.poster;
+
     return (
-        <div className="movie-page" style={{ '--movie-bg': `url(${movie.poster})` } as React.CSSProperties}>
-            <div className="movie-content">
-                <div className="movie-maininfo">
-                    <MoviePosterDet movie={movie} />
-                    <button onClick={() => navigate('/sessions')} className="buy-button">
-                        Придбати квиток
-                    </button>
-                </div>
-                <div className="movie-extra">
-                    <Carousel
-                        images={
-                            movie.photos && movie.photos.length > 0
-                                ? movie.photos
-                                : [
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_3H1BY4bIYR8000Z5yP0YjspdG7DQ61N3Zg&s',
-                                  ]
+        <div className="movie-page-full" style={{ backgroundImage: `url(${backgroundImage})` }}>
+            <div className="movie-page-full__overlay">
+                <div className="movie-page-full__content">
+                    <div className="movie-page-full__maininfo">
+                        <MoviePosterDet movie={movie} />
+                        {
+                            showButton ? (<button onClick={() => navigate(`/tickets/${id}`)} className="movie-page-full__buy-button">
+                            Придбати квиток
+                        </button>) : (<div className="movie-page-full__no-session">Фільму немає у прокаті</div>)
                         }
-                    />
-                    <p className="movie-description">{movie.description}</p>
-                    <p className="movie-cast">У ролях: {movie.cast.join(', ')}</p>
+                    </div>
+                    <div className="movie-page-full__extra">
+                        <Carousel images={movie.photos?.length ? movie.photos : [movie.poster]} />
+                        <p className="movie-page-full__description">{movie.description}</p>
+                        <p className="movie-page-full__cast">У ролях: {movie.cast.join(', ')}</p>
+                    </div>
                 </div>
             </div>
         </div>

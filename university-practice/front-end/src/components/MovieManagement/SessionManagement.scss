@@ -1,68 +1,77 @@
 .session-management {
-    padding: 20px;
+    background-color: #171616;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 12px;
 
     .add-button {
-        background: #C81313;
+        appearance: none;
+        background-color: #121010;
         color: white;
-        border: none;
+        border: 1px solid #ccc;
+        border-radius: 12px;
         padding: 0.75rem 1.5rem;
-        border-radius: 4px;
+        margin-bottom: 1.5rem;
         cursor: pointer;
-        margin-bottom: 2rem;
-        font-size: 1rem;
+        transition: all 0.2s;
 
         &:hover {
-            background: #a61010;
+            border-color: #999;
+            color: #fff;
         }
     }
 
     .session-form {
-        background: white;
-        padding: 20px;
+        background-color: #1c1c1c;
+        padding: 1.5rem;
+        border: 1px solid #333;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+        margin-bottom: 2rem;
 
+        select,
         input {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            width: 100%;
+            background-color: #121010;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
 
             &:focus {
+                border-color: #c81313;
                 outline: none;
-                border-color: #C81313;
             }
         }
 
         .form-buttons {
             display: flex;
-            gap: 10px;
-            
-            button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
+            gap: 1rem;
 
-                &[type="submit"] {
-                    background: #C81313;
+            button {
+                flex: 1;
+                padding: 0.75rem;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &[type='submit'] {
+                    background-color: #c81313;
                     color: white;
-                    
+
                     &:hover {
-                        background: #a61010;
+                        background-color: #a61010;
                     }
                 }
 
-                &[type="button"] {
-                    background: #666;
+                &[type='button'] {
+                    background-color: #444;
                     color: white;
-                    
+
                     &:hover {
-                        background: #555;
+                        background-color: #333;
                     }
                 }
             }
@@ -71,54 +80,55 @@
 
     .sessions-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 
         .session-item {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #121010;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
 
             .session-info {
+                margin-bottom: 1rem;
+
                 h3 {
-                    margin: 0 0 10px 0;
-                    color: #333;
+                    margin: 0 0 0.5rem;
                 }
 
                 p {
-                    margin: 5px 0;
-                    color: #666;
+                    margin: 0.25rem 0;
                 }
             }
 
             .session-actions {
-                margin-top: 15px;
                 display: flex;
-                gap: 10px;
+                gap: 0.5rem;
 
                 button {
                     flex: 1;
-                    padding: 8px;
+                    padding: 0.5rem;
                     border: none;
-                    border-radius: 4px;
+                    border-radius: 6px;
                     cursor: pointer;
-                    
+                    transition: background 0.2s;
+
                     &.edit-button {
                         background: #444;
-                        color: white;
-                        
+                        color: #fff;
+
                         &:hover {
                             background: #333;
                         }
                     }
-                    
+
                     &.delete-button {
-                        background: #ff4444;
-                        color: white;
-                        
+                        background: #c81313;
+                        color: #fff;
+
                         &:hover {
-                            background: #cc3333;
+                            background: #a61010;
                         }
                     }
                 }
@@ -126,16 +136,34 @@
         }
     }
 
-    .loading, .error, .no-sessions {
-        text-align: center;
-        padding: 2rem;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 2rem;
 
-    .error {
-        color: #dc2626;
-        background: #fee2e2;
+        button {
+            appearance: none;
+            background-color: #121010;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &.active {
+                background-color: #c81313;
+                border-color: #c81313;
+            }
+            &:hover:not(:disabled) {
+                border-color: #999;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: default;
+            }
+        }
     }
 }

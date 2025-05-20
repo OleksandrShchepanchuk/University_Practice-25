@@ -29,6 +29,10 @@ const BookingPage: React.FC = () => {
     const [processing, setProcessing] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
+    // Пагінація по датах
+    const [datePageIndex, setDatePageIndex] = useState(0);
+    const datesPerPage = 4;
+
     const tryBuy = () => setConfirmOpen(true);
 
     const handleInstantBuy = async () => {
@@ -49,16 +53,14 @@ const BookingPage: React.FC = () => {
             setProcessing(false);
         }
     };
-    /* pick session from URL after list is ready */
+
     useEffect(() => {
         const id = searchParams.get('session');
         if (!id || !sessions.length) return;
         const found = sessions.find((s) => s.id === id);
         if (found) setSelectedSession(found);
-        console.log(id);
     }, [sessions, searchParams]);
 
-    /* helper for clicks */
     const chooseSession = (session: MoviesSession) => {
         setSelectedSession(session);
         setSearchParams((prev) => {
@@ -82,6 +84,7 @@ const BookingPage: React.FC = () => {
             .sort((a, b) => a.schedule.date.localeCompare(b.schedule.date));
 
         setSessions(filtered);
+        setDatePageIndex(0);
 
         if (filtered.length) {
             setSelectedDate(filtered[0].schedule.date);
@@ -90,6 +93,12 @@ const BookingPage: React.FC = () => {
     }, [allSessions, movieId]);
 
     const uniqueDates = Array.from(new Set(sessions.map((s) => s.schedule.date)));
+    const totalPages = Math.ceil(uniqueDates.length / datesPerPage);
+    const paginatedDates = uniqueDates.slice(
+        datePageIndex * datesPerPage,
+        datePageIndex * datesPerPage + datesPerPage
+    );
+
     const sessionsForDate = sessions.filter((s) => s.schedule.date === selectedDate);
 
     let price = (selectedSession?.price ?? sessionsForDate[0]?.price) || 0;
@@ -117,9 +126,15 @@ const BookingPage: React.FC = () => {
                             <h2 className="booking-page__title">{sessions[0]?.movie.title || 'Завантаження...'}</h2>
 
                             <div className="booking-page__dates">
-                                <button className="booking-page__date-btn--nav">&#8249;</button>
+                                <button
+                                    className="booking-page__date-btn--nav"
+                                    onClick={() => setDatePageIndex((prev) => Math.max(0, prev - 1))}
+                                    disabled={datePageIndex === 0}
+                                >
+                                    &#8249;
+                                </button>
 
-                                {uniqueDates.map((date) => (
+                                {paginatedDates.map((date) => (
                                     <button
                                         key={date}
                                         className={`booking-page__date-btn ${
@@ -139,7 +154,13 @@ const BookingPage: React.FC = () => {
                                     </button>
                                 ))}
 
-                                <button className="booking-page__date-btn--nav">&#8250;</button>
+                                <button
+                                    className="booking-page__date-btn--nav"
+                                    onClick={() => setDatePageIndex((prev) => Math.min(totalPages - 1, prev + 1))}
+                                    disabled={datePageIndex >= totalPages - 1}
+                                >
+                                    &#8250;
+                                </button>
                             </div>
 
                             <div className="booking-page__times">

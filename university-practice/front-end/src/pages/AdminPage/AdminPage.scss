@@ -1,77 +1,67 @@
-.admin-panel {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+.admin-page {
+    position: relative;
+    min-height: 100vh;
 
-    .admin-header {
+    &__background {
+        /* точно як у Sessions */
+        background-color: #1c1c1c;
+        position: fixed;
+        top: 180px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        clip-path: polygon(0 0, 100% 15%, 100% 100%, 0% 100%);
+        z-index: 0;
+    }
+
+    &__page {
+        /* точно як у Sessions */
+        background-color: #171616;
+        position: relative;
+        z-index: 1;
+        top: 70px; /* опустити картку вниз під хедером */
+        width: 85%;
+        margin: 0 auto;
+        padding: 2rem;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    &__title {
+        color: white;
+        margin: 0 0 1rem;
+        font-size: 1.75rem;
+    }
+
+    &__tabs {
+        display: flex;
+        gap: 1rem;
         margin-bottom: 2rem;
+    }
 
-        h1 {
-            color: #333;
-            margin-bottom: 1rem;
+    &__tab {
+        appearance: none;
+        background-color: #121010;
+        color: #ccc;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            border-color: #999;
+            color: #fff;
         }
 
-        .admin-tabs {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 2px solid #848484;
-            padding-bottom: 1rem;
-
-            .tab {
-                padding: 0.5rem 1rem;
-                border: none;
-                background: none;
-                font-size: 1.1rem;
-                cursor: pointer;
-                color: #666;
-                position: relative;
-
-                &.active {
-                    color: #C81313;
-                    font-weight: 600;
-
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        bottom: -1rem;
-                        left: 0;
-                        width: 100%;
-                        height: 2px;
-                        background: #C81313;
-                    }
-                }
-
-                &:hover {
-                    color: #C81313;
-                }
-            }
+        &--active {
+            background-color: #c81313;
+            border-color: #c81313;
+            color: white;
         }
     }
 
-    .admin-content {
-        .add-button {
-            font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
-            font-weight: 400;
-            background: #C81313;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-
-            &:hover {
-                background: #a61010;
-            }
-        }
-
-        .movies-list,
-        .sessions-list {
-            background: #303030;
-            border-radius: 8px;
-            padding: 1rem;
-            // box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    &__content {
+        /* тут буде MovieManagement або SessionManagement */
     }
 }

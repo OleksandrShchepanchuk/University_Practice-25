@@ -15,6 +15,7 @@ import { loadFavourites } from './store/slices/favouriteSlice';
 import BookingPage from './pages/BookingPage/BookingPage.js';
 import AdminPage from './pages/AdminPage/AdminPage.js';
 import BookingHistoryPage from './pages/BookingHistoryPage/BookingHistoryPage.js';
+import Favourites from './pages/Favourites/Favourites';
 const App = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated } = useAuth();
@@ -38,6 +39,7 @@ const App = () => {
                         <Route path="/tickets/:movieId" element={<BookingPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+                        <Route path="/favourites" element={<Favourites />} />
 
                         {/* fallback */}
                         <Route path="*" element={<Navigate to="/" replace />} />

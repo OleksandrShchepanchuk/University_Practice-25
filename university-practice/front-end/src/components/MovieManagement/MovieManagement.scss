@@ -1,22 +1,44 @@
 .movie-management {
-    padding: 20px;
+    padding: 2rem;
 
-    .movie-form {
-        background: white;
-        padding: 20px;
+    /* ——— “Додати новий фільм” button ——— */
+    .add-button {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #fff;
+        background: transparent;
+        color: #fff;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+        &:hover {
+            background: #c81313;
+            border-color: #c81313;
+            color: #fff;
+        }
+    }
+
+    /* ——— The form container ——— */
+    .movie-form {
+        background: #171616;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
 
         input,
         textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            width: 100%;
+            background: #2f2f2f;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
 
             &:focus {
                 outline: none;
@@ -25,132 +47,129 @@
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 8rem;
             resize: vertical;
         }
 
         .form-buttons {
             display: flex;
-            gap: 10px;
+            gap: 1rem;
+            margin-top: 1rem;
 
             button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 20px;
+                flex: 1;
+                padding: 0.75rem;
+                font-size: 1rem;
+                border-radius: 6px;
                 cursor: pointer;
-                font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
+                border: none;
+                color: #fff;
+                transition: background 0.2s;
 
                 &[type='submit'] {
                     background: #c81313;
-                    color: white;
-
-                    &:hover {
-                        background: #a61010;
-                    }
+                }
+                &[type='submit']:hover {
+                    background: #a61010;
                 }
 
                 &[type='button'] {
-                    background: #666;
-                    color: white;
-
-                    &:hover {
-                        background: #555;
-                    }
+                    background: #444;
+                }
+                &[type='button']:hover {
+                    background: #555;
                 }
             }
         }
     }
 
+    /* ——— Restore the movie list grid ——— */
     .movies-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(4, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
 
-        .movie-item {
-            background: #2f2f2f;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: #2f2f2f solid 1px;
+    .movie-item {
+        background: #2f2f2f;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 
-            img {
-                width: 100%;
-                height: 200px;
-                object-fit: cover;
+        img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .movie-info {
+            padding: 1rem;
+
+            h3 {
+                margin: 0 0 0.25rem;
+                color: #fff;
             }
 
-            .movie-info {
-                padding: 15px;
+            p {
+                margin: 0.25rem 0 0;
+                color: #ccc;
+                font-size: 0.9rem;
+            }
+        }
 
-                h3 {
-                    margin: 0;
-                    color: rgba(255, 255, 255, 0.8);
-                }
+        .movie-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
 
-                p {
-                    margin: 5px 0 0;
-                    color: rgba(255, 255, 255, 0.8);
-                }
+            button {
+                flex: 1;
+                padding: 0.5rem 0;
+                font-size: 0.9rem;
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                transition: background 0.2s;
             }
 
-            .movie-actions {
-                padding: 15px;
-                display: flex;
-                gap: 10px;
+            .edit-button {
+                background: #444;
+                color: #fff;
+            }
+            .edit-button:hover {
+                background: #333;
+            }
 
-                button {
-                    font-family: 'Bakbak One', -apple-system, BlinkMacSystemFont, cursive;
-                    flex: 1;
-                    padding: 8px;
-                    border: none;
-                    border-radius: 15px;
-                    cursor: pointer;
-
-                    &:first-child {
-                        background: #444;
-                        color: white;
-
-                        &:hover {
-                            background: #333;
-                        }
-                    }
-
-                    &:last-child {
-                        background: #c81313;
-                        color: white;
-
-                        &:hover {
-                            background: #a61010;
-                        }
-                    }
-                }
+            .delete-button {
+                background: #c81313;
+                color: #fff;
+            }
+            .delete-button:hover {
+                background: #a61010;
             }
         }
     }
-}
 
-.movie-management,
-.session-management {
+    /* ——— Pagination (unchanged) ——— */
     .pagination {
         display: flex;
         justify-content: center;
-        gap: 8px;
-        margin: 2rem auto 0;
+        gap: 0.75rem;
+        margin-top: 2rem;
 
         button {
             background: #444;
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 6px;
-            padding: 6px 12px;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            font-family: 'Bakbak One', cursive;
             transition: background 0.2s;
 
             &:hover:not(:disabled) {
                 background: #666;
             }
-
             &.active {
                 background: #c81313;
             }

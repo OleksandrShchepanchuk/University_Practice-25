@@ -64,7 +64,7 @@ const MoviesView: React.FC<MoviesViewProps> = ({ title = 'Movies', movies, loadi
             {loading && <Loader />}
             {error && <p className="movies-view__status movies-view__status--error">Error: {error}</p>}
             {!loading && !error && currentMovies.length === 0 && (
-                <p className="movies-view__status">No movies available.</p>
+                <p className="movies-view__status">Немає доступних фільмів.</p>
             )}
 
             <div className="movies-view__search">

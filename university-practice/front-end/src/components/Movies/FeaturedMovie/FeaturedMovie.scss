@@ -90,6 +90,13 @@
                 border-radius: 30px;
                 font-size: 19px;
                 white-space: nowrap;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    filter: brightness(90%);
+                }
+
             }
 
             &--buy {
@@ -102,6 +109,13 @@
                 border-radius: 30px;
                 font-size: 19px;
                 white-space: nowrap;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    filter: brightness(90%);
+                }
+
             }
         }
     }
