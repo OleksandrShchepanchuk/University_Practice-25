@@ -21,7 +21,7 @@ const BookingHistoryPage: React.FC = () => {
             try {
                 setLoading(true);
                 const bookingsData = await getBookings();
-                const bookingsWithSessions = bookingsData.map((booking) => {
+                const bookingsWithSessions = bookingsData.map((booking: BookingWithSession) => {
                     try {
                         const session = booking.session;
                         return { ...booking, session };
@@ -56,7 +56,7 @@ const BookingHistoryPage: React.FC = () => {
             ) : (
                 <div className="booking-history__list">
                     {bookings.map((booking) => (
-                        <div key={booking.session.id} className="booking-card">
+                        <div key={booking.session?.id} className="booking-card">
                             {booking.session ? (
                                 <div className="booking-card__content">
                                     <img
