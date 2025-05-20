@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Maitree:wght@200;300;400&display=swap&subset=latin,cyrillic');
+
+:root {
+    /* Typography */
+    --font-title: 'Bakbak One', sans-serif;
+    --font-family: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body:  'Maitree', sans-serif;
+
+
+    /* Colors (light/default) */
+    --bg-color: #ffffff;
+    --text-color: #222;
+    --card-bg: #f9f9f9;
+    --image-bg: #eaeaea;
+    --fav-btn-bg: rgba(255, 255, 255, 0.9);
+    --fav-btn-hover: #ffe58f;
+    --badge-bg: #e6f7ff;
+    --badge-color: #1890ff;
+}
+
+/* ====== Dark Theme ====== */
+.dark {
+    --bg-color: #303030;
+    --text-color: #e0e0e0;
+    --card-bg: #424242;
+    --image-bg: #2f2f2f;
+    --fav-btn-bg: rgba(0, 0, 0, 0.5);
+    --fav-btn-hover: #ffd666;
+    --badge-bg: #4a4a4a;
+    --badge-color: #69c0ff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+html,
+body {
+    font-family: var(--font-family);
+    font-weight: 500;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: var(--font-family);
+}

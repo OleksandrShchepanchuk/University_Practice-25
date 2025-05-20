@@ -1,0 +1,169 @@
+.session-management {
+    background-color: #171616;
+    padding: 2rem;
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    .add-button {
+        appearance: none;
+        background-color: #121010;
+        color: white;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            border-color: #999;
+            color: #fff;
+        }
+    }
+
+    .session-form {
+        background-color: #1c1c1c;
+        padding: 1.5rem;
+        border: 1px solid #333;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+
+        select,
+        input {
+            width: 100%;
+            background-color: #121010;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+
+            &:focus {
+                border-color: #c81313;
+                outline: none;
+            }
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+
+            button {
+                flex: 1;
+                padding: 0.75rem;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &[type='submit'] {
+                    background-color: #c81313;
+                    color: white;
+
+                    &:hover {
+                        background-color: #a61010;
+                    }
+                }
+
+                &[type='button'] {
+                    background-color: #444;
+                    color: white;
+
+                    &:hover {
+                        background-color: #333;
+                    }
+                }
+            }
+        }
+    }
+
+    .sessions-list {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+        .session-item {
+            background-color: #121010;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+
+            .session-info {
+                margin-bottom: 1rem;
+
+                h3 {
+                    margin: 0 0 0.5rem;
+                }
+
+                p {
+                    margin: 0.25rem 0;
+                }
+            }
+
+            .session-actions {
+                display: flex;
+                gap: 0.5rem;
+
+                button {
+                    flex: 1;
+                    padding: 0.5rem;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+
+                    &.edit-button {
+                        background: #444;
+                        color: #fff;
+
+                        &:hover {
+                            background: #333;
+                        }
+                    }
+
+                    &.delete-button {
+                        background: #c81313;
+                        color: #fff;
+
+                        &:hover {
+                            background: #a61010;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 2rem;
+
+        button {
+            appearance: none;
+            background-color: #121010;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &.active {
+                background-color: #c81313;
+                border-color: #c81313;
+            }
+            &:hover:not(:disabled) {
+                border-color: #999;
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: default;
+            }
+        }
+    }
+}

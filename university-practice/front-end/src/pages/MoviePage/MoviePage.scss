@@ -1,0 +1,90 @@
+.movie-page-full {
+    height: 100dvh; // force full height
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+
+    &__overlay {
+        flex: 1; // fills height of parent
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    &__content {
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        color: white;
+
+        @media (min-width: 1024px) {
+            flex-direction: row;
+            gap: 3rem;
+        }
+    }
+
+    &__maininfo {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .poster {
+            width: 90%;
+            border-radius: 12px;
+        }
+    }
+
+    &__buy-button {
+        background-color: #c81313;
+        color: white;
+        padding: 10px 22px;
+        border: none;
+        border-radius: 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s ease;
+
+        &:hover {
+            background-color: #af1313;
+        }
+    }
+
+    &__extra {
+        flex: 2;
+        margin-top: 3rem;
+
+        @media (min-width: 1024px) {
+            margin-top: 3rem;
+        }
+    }
+
+    &__description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-top: 1.2rem;
+    }
+
+    &__cast {
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        color: #ccc;
+    }
+
+    &__no-session {
+        margin-top: 5%;
+        align-self: flex-start;
+        font-family: 'Maitree', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #b2aeaebc;
+    }
+}
